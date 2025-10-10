@@ -112,7 +112,8 @@ export const useCreateLink = () => {
       const paymentUrl = `${window.location.origin}/pay/${linkId}`;
       
       // Simple signature (in production, use HMAC)
-      const signature = btoa(JSON.stringify(linkData.payload));
+      // Use encodeURIComponent to handle Arabic and other Unicode characters
+      const signature = btoa(encodeURIComponent(JSON.stringify(linkData.payload)));
       
       const { data, error } = await (supabase as any)
         .from("links")
