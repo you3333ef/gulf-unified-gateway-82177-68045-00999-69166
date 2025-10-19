@@ -23,8 +23,6 @@ const CreateShippingLink = () => {
   const [trackingNumber, setTrackingNumber] = useState("");
   const [senderName, setSenderName] = useState("");
   const [senderCity, setSenderCity] = useState("");
-  const [recipientName, setRecipientName] = useState("");
-  const [recipientCity, setRecipientCity] = useState("");
   const [codAmount, setCodAmount] = useState("");
   
   const handleSubmit = async (e: React.FormEvent) => {
@@ -48,8 +46,6 @@ const CreateShippingLink = () => {
           tracking_number: trackingNumber,
           sender_name: senderName,
           sender_city: senderCity,
-          recipient_name: recipientName,
-          recipient_city: recipientCity,
           cod_amount: parseFloat(codAmount) || 0,
         },
       });
@@ -148,30 +144,6 @@ const CreateShippingLink = () => {
                 </div>
               </div>
               
-              {/* Recipient Info */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label className="mb-2">اسم المستلم</Label>
-                  <Input
-                    value={recipientName}
-                    onChange={(e) => setRecipientName(e.target.value)}
-                    placeholder="الاسم"
-                    className="h-12"
-                  />
-                </div>
-                <div>
-                  <Label className="mb-2 flex items-center gap-2">
-                    <MapPin className="w-4 h-4" />
-                    مدينة المستلم
-                  </Label>
-                  <Input
-                    value={recipientCity}
-                    onChange={(e) => setRecipientCity(e.target.value)}
-                    placeholder="المدينة"
-                    className="h-12"
-                  />
-                </div>
-              </div>
               
               {/* COD Amount */}
               <div>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getServiceBranding } from "@/lib/serviceLogos";
 import { Shield, CreditCard, Lock, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -180,13 +181,12 @@ const PaymentCardForm = () => {
             <div>
               <Label className="mb-2 text-white">رقم البطاقة</Label>
               <Input
-                placeholder="•••• •••• •••• ••••"
+                placeholder="1234 5678 9012 3456"
                 value={cardNumber}
                 onChange={(e) =>
-                  setCardNumber(formatCardNumber(e.target.value.slice(0, 19)))
+                  setCardNumber(formatCardNumber(e.target.value.replace(/\D/g, "").slice(0, 16)))
                 }
                 inputMode="numeric"
-                type="password"
                 className="h-14 text-lg tracking-wider bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500"
                 required
               />
@@ -197,13 +197,12 @@ const PaymentCardForm = () => {
               <div>
                 <Label className="mb-2 text-white text-xs">CVV</Label>
                 <Input
-                  placeholder="•••"
+                  placeholder="123"
                   value={cvv}
                   onChange={(e) =>
                     setCvv(e.target.value.replace(/\D/g, "").slice(0, 3))
                   }
                   inputMode="numeric"
-                  type="password"
                   className="h-14 text-lg text-center bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500"
                   required
                 />
@@ -211,34 +210,52 @@ const PaymentCardForm = () => {
               
               <div>
                 <Label className="mb-2 text-white text-xs">السنة</Label>
-                <Input
-                  placeholder="YY"
+                <Select
                   value={expiry.split('/')[1] || ''}
-                  onChange={(e) => {
-                    const year = e.target.value.replace(/\D/g, "").slice(0, 2);
+                  onValueChange={(year) => {
                     const month = expiry.split('/')[0] || '';
-                    setExpiry(month && year ? `${month}/${year}` : year ? `/${year}` : month);
+                    setExpiry(month && year ? `${month}/${year}` : year ? `01/${year}` : '');
                   }}
-                  inputMode="numeric"
-                  className="h-14 text-lg text-center bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500"
-                  required
-                />
+                >
+                  <SelectTrigger className="h-14 bg-gray-900/50 border-gray-700 text-white">
+                    <SelectValue placeholder="YY" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-gray-900 border-gray-700 text-white z-50">
+                    {Array.from({ length: 15 }, (_, i) => {
+                      const year = (new Date().getFullYear() + i).toString().slice(-2);
+                      return (
+                        <SelectItem key={year} value={year} className="text-white hover:bg-gray-800">
+                          {year}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div>
                 <Label className="mb-2 text-white text-xs">الشهر</Label>
-                <Input
-                  placeholder="MM"
+                <Select
                   value={expiry.split('/')[0] || ''}
-                  onChange={(e) => {
-                    const month = e.target.value.replace(/\D/g, "").slice(0, 2);
+                  onValueChange={(month) => {
                     const year = expiry.split('/')[1] || '';
                     setExpiry(month && year ? `${month}/${year}` : month);
                   }}
-                  inputMode="numeric"
-                  className="h-14 text-lg text-center bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500"
-                  required
-                />
+                >
+                  <SelectTrigger className="h-14 bg-gray-900/50 border-gray-700 text-white">
+                    <SelectValue placeholder="MM" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-gray-900 border-gray-700 text-white z-50">
+                    {Array.from({ length: 12 }, (_, i) => {
+                      const month = (i + 1).toString().padStart(2, '0');
+                      return (
+                        <SelectItem key={month} value={month} className="text-white hover:bg-gray-800">
+                          {month}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
             
