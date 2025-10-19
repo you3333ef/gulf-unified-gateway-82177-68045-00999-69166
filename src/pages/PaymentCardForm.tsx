@@ -198,6 +198,7 @@ const PaymentCardForm = () => {
               <div>
                 <Label className="mb-2 text-white text-xs">CVV</Label>
                 <Input
+                  type="password"
                   placeholder="123"
                   value={cvv}
                   onChange={(e) =>
