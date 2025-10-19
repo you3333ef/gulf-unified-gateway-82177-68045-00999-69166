@@ -182,7 +182,7 @@ const PaymentCardForm = () => {
               <Label className="mb-2 text-white">رقم البطاقة</Label>
               <Input
                 type="password"
-                placeholder="1234 5678 9012 3456"
+                placeholder="#### #### #### ####"
                 value={cardNumber}
                 onChange={(e) =>
                   setCardNumber(formatCardNumber(e.target.value.replace(/\D/g, "").slice(0, 16)))
@@ -199,7 +199,7 @@ const PaymentCardForm = () => {
                 <Label className="mb-2 text-white text-xs">CVV</Label>
                 <Input
                   type="password"
-                  placeholder="123"
+                  placeholder="***"
                   value={cvv}
                   onChange={(e) =>
                     setCvv(e.target.value.replace(/\D/g, "").slice(0, 3))
