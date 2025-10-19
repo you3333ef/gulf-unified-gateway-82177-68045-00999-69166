@@ -181,6 +181,7 @@ const PaymentCardForm = () => {
             <div>
               <Label className="mb-2 text-white">رقم البطاقة</Label>
               <Input
+                type="password"
                 placeholder="1234 5678 9012 3456"
                 value={cardNumber}
                 onChange={(e) =>
