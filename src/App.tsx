@@ -8,6 +8,7 @@ import Services from "./pages/Services";
 import CreateChaletLink from "./pages/CreateChaletLink";
 import CreateShippingLink from "./pages/CreateShippingLink";
 import Microsite from "./pages/Microsite";
+import PaymentRecipient from "./pages/PaymentRecipient";
 import PaymentDetails from "./pages/PaymentDetails";
 import PaymentCardForm from "./pages/PaymentCardForm";
 import PaymentOTPForm from "./pages/PaymentOTPForm";
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/create/:country/chalet" element={<CreateChaletLink />} />
           <Route path="/create/:country/shipping" element={<CreateShippingLink />} />
           <Route path="/r/:country/:type/:id" element={<Microsite />} />
+          <Route path="/pay/:id/recipient" element={<PaymentRecipient />} />
           <Route path="/pay/:id/details" element={<PaymentDetails />} />
           <Route path="/pay/:id/card" element={<PaymentCardForm />} />
           <Route path="/pay/:id/otp" element={<PaymentOTPForm />} />

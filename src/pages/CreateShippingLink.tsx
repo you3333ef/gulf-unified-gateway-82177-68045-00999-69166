@@ -51,7 +51,7 @@ const CreateShippingLink = () => {
       });
       
       // Navigate to payment page with service parameter
-      navigate(`/pay/${link.id}/details?service=${selectedService}`);
+      navigate(`/pay/${link.id}/recipient?service=${selectedService}`);
     } catch (error) {
       console.error("Error creating link:", error);
     }
