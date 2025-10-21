@@ -1,5 +1,5 @@
 // Service logos and branding - All GCC shipping carriers
-export const serviceLogos: Record<string, { logo: string; colors: { primary: string; secondary: string }; ogImage?: string }> = {
+export const serviceLogos: Record<string, { logo: string; colors: { primary: string; secondary: string }; ogImage?: string; heroImage?: string }> = {
   // UAE - الإمارات
   aramex: {
     logo: "https://www.aramex.com/sites/default/files/aramex-logo.svg",
@@ -7,7 +7,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       primary: "#ED1C24",
       secondary: "#000000"
     },
-    ogImage: "https://www.aramex.com/sites/default/files/aramex-truck.jpg"
+    ogImage: "https://www.aramex.com/sites/default/files/aramex-truck.jpg",
+    heroImage: "hero-aramex"
   },
   dhl: {
     logo: "https://www.dhl.com/content/dam/dhl/global/core/images/logos/dhl-logo.svg",
@@ -15,7 +16,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       primary: "#FFCC00",
       secondary: "#D40511"
     },
-    ogImage: "https://www.dhl.com/content/dam/dhl/global/core/images/generic/dhl-plane.jpg"
+    ogImage: "https://www.dhl.com/content/dam/dhl/global/core/images/generic/dhl-plane.jpg",
+    heroImage: "hero-dhl"
   },
   fedex: {
     logo: "https://www.fedex.com/content/dam/fedex-com/logos/logo.png",
@@ -23,7 +25,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       primary: "#4D148C",
       secondary: "#FF6600"
     },
-    ogImage: "https://www.fedex.com/content/dam/fedex/images/aircraft.jpg"
+    ogImage: "https://www.fedex.com/content/dam/fedex/images/aircraft.jpg",
+    heroImage: "hero-fedex"
   },
   ups: {
     logo: "https://www.ups.com/assets/resources/webcontent/images/ups-logo.svg",
@@ -49,7 +52,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       primary: "#0066CC",
       secondary: "#FF6600"
     },
-    ogImage: "https://www.smsaexpress.com/images/delivery.jpg"
+    ogImage: "https://www.smsaexpress.com/images/delivery.jpg",
+    heroImage: "hero-smsa"
   },
   zajil: {
     logo: "https://zajil.com/assets/images/logo.png",
