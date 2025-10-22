@@ -10,6 +10,16 @@ import heroAramex from "@/assets/hero-aramex.jpg";
 import heroDhl from "@/assets/hero-dhl.jpg";
 import heroFedex from "@/assets/hero-fedex.jpg";
 import heroSmsa from "@/assets/hero-smsa.jpg";
+import heroUps from "@/assets/hero-ups.jpg";
+import heroEmpost from "@/assets/hero-empost.jpg";
+import heroZajil from "@/assets/hero-zajil.jpg";
+import heroNaqel from "@/assets/hero-naqel.jpg";
+import heroSaudipost from "@/assets/hero-saudipost.jpg";
+import heroKwpost from "@/assets/hero-kwpost.jpg";
+import heroQpost from "@/assets/hero-qpost.jpg";
+import heroOmanpost from "@/assets/hero-omanpost.jpg";
+import heroBahpost from "@/assets/hero-bahpost.jpg";
+import heroBg from "@/assets/hero-bg.jpg";
 
 const PaymentDetails = () => {
   const { id } = useParams();
@@ -25,11 +35,24 @@ const PaymentDetails = () => {
   const heroImages: Record<string, string> = {
     'aramex': heroAramex,
     'dhl': heroDhl,
+    'dhlkw': heroDhl,
+    'dhlqa': heroDhl,
+    'dhlom': heroDhl,
+    'dhlbh': heroDhl,
     'fedex': heroFedex,
     'smsa': heroSmsa,
+    'ups': heroUps,
+    'empost': heroEmpost,
+    'zajil': heroZajil,
+    'naqel': heroNaqel,
+    'saudipost': heroSaudipost,
+    'kwpost': heroKwpost,
+    'qpost': heroQpost,
+    'omanpost': heroOmanpost,
+    'bahpost': heroBahpost,
   };
   
-  const heroImage = heroImages[serviceName.toLowerCase()] || heroAramex;
+  const heroImage = heroImages[serviceName.toLowerCase()] || heroBg;
   
   const handleProceed = () => {
     navigate(`/pay/${id}/card`);
