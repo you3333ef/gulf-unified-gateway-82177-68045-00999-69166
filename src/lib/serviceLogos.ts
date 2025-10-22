@@ -7,7 +7,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       primary: "#ED1C24",
       secondary: "#000000"
     },
-    ogImage: "https://www.aramex.com/sites/default/files/aramex-truck.jpg",
+    ogImage: "/og-aramex.jpg",
     heroImage: "hero-aramex"
   },
   dhl: {
@@ -16,7 +16,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       primary: "#FFCC00",
       secondary: "#D40511"
     },
-    ogImage: "https://www.dhl.com/content/dam/dhl/global/core/images/generic/dhl-plane.jpg",
+    ogImage: "/og-dhl.jpg",
     heroImage: "hero-dhl"
   },
   fedex: {
@@ -25,7 +25,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       primary: "#4D148C",
       secondary: "#FF6600"
     },
-    ogImage: "https://www.fedex.com/content/dam/fedex/images/aircraft.jpg",
+    ogImage: "/og-fedex.jpg",
     heroImage: "hero-fedex"
   },
   ups: {
@@ -52,7 +52,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       primary: "#0066CC",
       secondary: "#FF6600"
     },
-    ogImage: "https://www.smsaexpress.com/images/delivery.jpg",
+    ogImage: "/og-smsa.jpg",
     heroImage: "hero-smsa"
   },
   zajil: {

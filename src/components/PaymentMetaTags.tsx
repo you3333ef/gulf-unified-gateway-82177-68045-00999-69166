@@ -13,7 +13,9 @@ const PaymentMetaTags = ({ serviceName, amount, title, description }: PaymentMet
   
   const ogTitle = title || `الدفع - ${serviceName}`;
   const ogDescription = description || `صفحة دفع آمنة ومحمية لخدمة ${serviceName}${amount ? ` - ${amount}` : ''}`;
-  const ogImage = branding.ogImage || branding.logo || "https://lovable.dev/opengraph-image-p98pqg.png";
+  const ogImage = branding.ogImage 
+    ? `${window.location.origin}${branding.ogImage}`
+    : branding.logo || `${window.location.origin}/og-aramex.jpg`;
   
   return (
     <Helmet>
