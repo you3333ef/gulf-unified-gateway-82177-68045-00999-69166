@@ -14,3 +14,7 @@
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Netlify Forms Configuration
+# Email notifications will be sent to the email configured in Netlify dashboard
+# Go to Site Settings > Forms > Form notifications to configure Gmail notifications

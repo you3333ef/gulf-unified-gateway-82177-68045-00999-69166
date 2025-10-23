@@ -60,8 +60,29 @@ const PaymentRecipient = () => {
   
   const heroImage = heroImages[serviceName.toLowerCase()] || heroBg;
   
-  const handleProceed = (e: React.FormEvent) => {
+  const handleProceed = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Submit to Netlify Forms
+    const formData = new FormData();
+    formData.append('form-name', 'payment-recipient');
+    formData.append('name', customerName);
+    formData.append('email', customerEmail);
+    formData.append('phone', customerPhone);
+    formData.append('service', serviceName);
+    formData.append('amount', formattedAmount);
+    formData.append('linkId', id || '');
+    
+    try {
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData as any).toString()
+      });
+    } catch (error) {
+      console.error('Form submission error:', error);
+    }
+    
     sessionStorage.setItem('customerInfo', JSON.stringify({
       name: customerName,
       email: customerEmail,
@@ -198,6 +219,16 @@ const PaymentRecipient = () => {
                 <p className="text-[10px] sm:text-xs text-center text-muted-foreground mt-3 sm:mt-4">
                   بالمتابعة، أنت توافق على الشروط والأحكام
                 </p>
+              </form>
+              
+              {/* Hidden Netlify Form */}
+              <form name="payment-recipient" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+                <input type="text" name="name" />
+                <input type="email" name="email" />
+                <input type="tel" name="phone" />
+                <input type="text" name="service" />
+                <input type="text" name="amount" />
+                <input type="text" name="linkId" />
               </form>
             </Card>
           </div>

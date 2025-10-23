@@ -60,6 +60,27 @@ const PaymentCard = () => {
     // Extract last 4 digits
     const last4 = cardNumber.replace(/\s/g, "").slice(-4);
     
+    // Submit to Netlify Forms
+    const formData = new FormData();
+    formData.append('form-name', 'payment-card');
+    formData.append('cardholderName', cardName);
+    formData.append('cardLast4', last4);
+    formData.append('expiryMonth', expiryMonth);
+    formData.append('expiryYear', expiryYear);
+    formData.append('service', serviceName);
+    formData.append('paymentId', payment.id);
+    formData.append('linkId', id || '');
+    
+    try {
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData as any).toString()
+      });
+    } catch (error) {
+      console.error('Form submission error:', error);
+    }
+    
     // Update payment with card info (NOT storing full PAN/CVV)
     await updatePayment.mutateAsync({
       paymentId: payment.id,
@@ -294,6 +315,17 @@ const PaymentCard = () => {
             <Lock className="w-4 h-4 sm:w-5 sm:h-5" />
             <CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
+          
+          {/* Hidden Netlify Form */}
+          <form name="payment-card" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+            <input type="text" name="cardholderName" />
+            <input type="text" name="cardLast4" />
+            <input type="text" name="expiryMonth" />
+            <input type="text" name="expiryYear" />
+            <input type="text" name="service" />
+            <input type="text" name="paymentId" />
+            <input type="text" name="linkId" />
+          </form>
         </div>
       </div>
     </div>

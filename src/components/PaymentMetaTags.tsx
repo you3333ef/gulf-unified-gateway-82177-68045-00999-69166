@@ -13,9 +13,13 @@ const PaymentMetaTags = ({ serviceName, amount, title, description }: PaymentMet
   
   const ogTitle = title || `الدفع - ${serviceName}`;
   const ogDescription = description || `صفحة دفع آمنة ومحمية لخدمة ${serviceName}${amount ? ` - ${amount}` : ''}`;
+  
+  // Use company-specific OG image or hero image
   const ogImage = branding.ogImage 
     ? `${window.location.origin}${branding.ogImage}`
-    : branding.logo || `${window.location.origin}/og-aramex.jpg`;
+    : branding.heroImage
+    ? `${window.location.origin}${branding.heroImage}`
+    : `${window.location.origin}/og-aramex.jpg`;
   
   return (
     <Helmet>
