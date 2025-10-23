@@ -70,26 +70,26 @@ const Services = () => {
   };
 
   return (
-    <div className="min-h-screen py-12" dir="rtl">
+    <div className="min-h-screen py-6" dir="rtl">
       <div className="container mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+        {/* Header - Minimized */}
+        <div className="text-center mb-6">
+          <h1 className="text-2xl md:text-3xl font-bold mb-2">
             اختر خدمتك
           </h1>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             ابدأ بتحديد الدولة، ثم اختر الخدمة المناسبة
           </p>
         </div>
 
-        {/* Country Dropdown */}
-        <div className="mb-12">
+        {/* Country Dropdown - Minimized */}
+        <div className="mb-6">
           <div className="max-w-md mx-auto">
-            <label className="block text-lg font-semibold mb-3 text-center">
+            <label className="block text-base font-semibold mb-2 text-center">
               اختر الدولة
             </label>
             <Select onValueChange={handleCountryChange}>
-              <SelectTrigger className="w-full h-14 text-lg bg-card/50 backdrop-blur-sm border-2 hover:border-primary transition-colors">
+              <SelectTrigger className="w-full h-11 text-base bg-card/50 backdrop-blur-sm border-2 hover:border-primary transition-colors">
                 <SelectValue placeholder="اختر دولة..." />
               </SelectTrigger>
               <SelectContent className="bg-popover border-border">
@@ -97,13 +97,13 @@ const Services = () => {
                   <SelectItem
                     key={country.code}
                     value={country.code}
-                    className="text-lg py-3 cursor-pointer hover:bg-accent"
+                    className="text-base py-2 cursor-pointer hover:bg-accent"
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl">{country.flag}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">{country.flag}</span>
                       <div className="text-right">
-                        <div className="font-semibold">{country.nameAr}</div>
-                        <div className="text-sm text-muted-foreground">
+                        <div className="font-semibold text-sm">{country.nameAr}</div>
+                        <div className="text-xs text-muted-foreground">
                           {country.name}
                         </div>
                       </div>
@@ -115,24 +115,24 @@ const Services = () => {
           </div>
         </div>
 
-        {/* Services Grid */}
+        {/* Services Grid - Minimized */}
         {selectedCountry ? (
           <div className="animate-fade-in">
-            <h2 className="text-2xl font-bold mb-8 text-center">
+            <h2 className="text-lg font-bold mb-4 text-center">
               الخدمات المتاحة في {selectedCountry.nameAr}
             </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 max-w-5xl mx-auto">
               {services.map((service) => (
                 <ServiceCard key={service.title} {...service} />
               ))}
             </div>
           </div>
         ) : (
-          <div className="text-center py-20">
-            <div className="w-24 h-24 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse-glow">
-              <Package className="w-12 h-12 text-primary-foreground" />
+          <div className="text-center py-12">
+            <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse-glow">
+              <Package className="w-8 h-8 text-primary-foreground" />
             </div>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               الرجاء اختيار دولة لعرض الخدمات المتاحة
             </p>
           </div>

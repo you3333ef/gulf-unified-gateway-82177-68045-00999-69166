@@ -86,50 +86,49 @@ const CreateChaletLink = () => {
   
   if (createdLink) {
     return (
-      <div className="min-h-screen py-12" dir="rtl">
+      <div className="min-h-screen py-6" dir="rtl">
         <div className="container mx-auto px-4">
-          <Card className="max-w-2xl mx-auto p-8 text-center">
-            <div className="w-20 h-20 bg-gradient-success rounded-full flex items-center justify-center mx-auto mb-6">
-              <Check className="w-10 h-10 text-white" />
+          <Card className="max-w-xl mx-auto p-4 text-center">
+            <div className="w-14 h-14 bg-gradient-success rounded-full flex items-center justify-center mx-auto mb-3">
+              <Check className="w-7 h-7 text-white" />
             </div>
             
-            <h2 className="text-3xl font-bold mb-4">تم إنشاء الرابط بنجاح!</h2>
-            <p className="text-muted-foreground mb-8">
+            <h2 className="text-xl font-bold mb-2">تم إنشاء الرابط بنجاح!</h2>
+            <p className="text-sm text-muted-foreground mb-4">
               شارك هذا الرابط مع عملائك
             </p>
             
-            <div className="bg-secondary/50 p-4 rounded-lg mb-6 break-all">
-              <code className="text-sm">{createdLink}</code>
+            <div className="bg-secondary/50 p-3 rounded-lg mb-4 break-all">
+              <code className="text-xs">{createdLink}</code>
             </div>
             
-            <div className="flex gap-4 justify-center">
-              <Button onClick={handleCopy} size="lg">
+            <div className="flex gap-3 justify-center">
+              <Button onClick={handleCopy}>
                 {copied ? (
                   <>
-                    <Check className="w-5 h-5 ml-2" />
-                    <span>تم النسخ</span>
+                    <Check className="w-4 h-4 ml-2" />
+                    <span className="text-sm">تم النسخ</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="w-5 h-5 ml-2" />
-                    <span>نسخ الرابط</span>
+                    <Copy className="w-4 h-4 ml-2" />
+                    <span className="text-sm">نسخ الرابط</span>
                   </>
                 )}
               </Button>
               
               <Button
                 variant="outline"
-                size="lg"
                 onClick={() => window.open(createdLink, "_blank")}
               >
-                <span className="ml-2">عرض المعاينة</span>
-                <ArrowRight className="w-5 h-5 mr-2" />
+                <span className="ml-2 text-sm">عرض المعاينة</span>
+                <ArrowRight className="w-4 h-4 mr-2" />
               </Button>
             </div>
             
             <Button
               variant="ghost"
-              className="mt-8"
+              className="mt-4 text-sm"
               onClick={() => navigate("/services")}
             >
               إنشاء رابط جديد
@@ -141,43 +140,43 @@ const CreateChaletLink = () => {
   }
   
   return (
-    <div className="min-h-screen py-12" dir="rtl">
+    <div className="min-h-screen py-6" dir="rtl">
       <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto">
-          {/* Header */}
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-4">
+        <div className="max-w-2xl mx-auto">
+          {/* Header - Minimized */}
+          <div className="mb-4">
+            <div className="flex items-center gap-2 mb-3">
               <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center"
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
                 style={{
                   background: `linear-gradient(135deg, ${countryData.primaryColor}, ${countryData.secondaryColor})`,
                 }}
               >
-                <Home className="w-6 h-6 text-white" />
+                <Home className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold">حجز شاليه - {countryData.nameAr}</h1>
-                <p className="text-muted-foreground">أنشئ رابط حجز مخصص</p>
+                <h1 className="text-xl font-bold">حجز شاليه - {countryData.nameAr}</h1>
+                <p className="text-xs text-muted-foreground">أنشئ رابط حجز مخصص</p>
               </div>
             </div>
           </div>
           
-          <Card className="p-8">
-            <div className="space-y-6">
+          <Card className="p-4">
+            <div className="space-y-4">
               {/* Chalet Selection */}
               <div>
-                <Label className="text-lg mb-2">اختر الشاليه</Label>
+                <Label className="text-sm mb-2">اختر الشاليه</Label>
                 <Select onValueChange={setSelectedChaletId} disabled={isLoading}>
-                  <SelectTrigger className="w-full h-12">
+                  <SelectTrigger className="w-full h-10">
                     <SelectValue placeholder={isLoading ? "جاري التحميل..." : "اختر شاليه..."} />
                   </SelectTrigger>
                   <SelectContent>
                     {chalets?.map((chalet) => (
                       <SelectItem key={chalet.id} value={chalet.id}>
                         <div className="flex items-center gap-2">
-                          <span>{chalet.name}</span>
+                          <span className="text-sm">{chalet.name}</span>
                           {chalet.verified && (
-                            <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
+                            <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded">
                               موثّق
                             </span>
                           )}
@@ -190,64 +189,64 @@ const CreateChaletLink = () => {
               
               {selectedChalet && (
                 <>
-                  {/* Chalet Details */}
-                  <div className="bg-secondary/30 p-4 rounded-lg">
-                    <p className="text-sm text-muted-foreground mb-1">
+                  {/* Chalet Details - Minimized */}
+                  <div className="bg-secondary/30 p-3 rounded-lg">
+                    <p className="text-xs text-muted-foreground mb-1">
                       <strong>المدينة:</strong> {selectedChalet.city}
                     </p>
-                    <p className="text-sm text-muted-foreground mb-1">
+                    <p className="text-xs text-muted-foreground mb-1">
                       <strong>العنوان:</strong> {selectedChalet.address}
                     </p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs text-muted-foreground">
                       <strong>السعة:</strong> حتى {selectedChalet.capacity} ضيف
                     </p>
                   </div>
                   
                   {/* Price per Night */}
                   <div>
-                    <Label className="text-lg mb-2">
+                    <Label className="text-sm mb-2">
                       سعر الليلة ({countryData.currency})
                     </Label>
                     <Input
                       type="number"
                       value={pricePerNight}
                       onChange={(e) => setPricePerNight(Number(e.target.value))}
-                      className="h-12 text-lg"
+                      className="h-9 text-sm"
                     />
                   </div>
                   
                   {/* Number of Nights */}
                   <div>
-                    <Label className="text-lg mb-2">عدد الليالي</Label>
+                    <Label className="text-sm mb-2">عدد الليالي</Label>
                     <Input
                       type="number"
                       min="1"
                       value={nights}
                       onChange={(e) => setNights(Number(e.target.value))}
-                      className="h-12 text-lg"
+                      className="h-9 text-sm"
                     />
                   </div>
                   
                   {/* Guest Count */}
                   <div>
-                    <Label className="text-lg mb-2">عدد الضيوف</Label>
+                    <Label className="text-sm mb-2">عدد الضيوف</Label>
                     <Input
                       type="number"
                       min="1"
                       max={selectedChalet.capacity}
                       value={guestCount}
                       onChange={(e) => setGuestCount(Number(e.target.value))}
-                      className="h-12 text-lg"
+                      className="h-9 text-sm"
                     />
                   </div>
                   
                   {/* Total Amount */}
-                  <div className="bg-gradient-primary p-6 rounded-xl text-primary-foreground">
-                    <p className="text-sm mb-2">المبلغ الإجمالي</p>
-                    <p className="text-4xl font-bold">
+                  <div className="bg-gradient-primary p-4 rounded-xl text-primary-foreground">
+                    <p className="text-xs mb-1">المبلغ الإجمالي</p>
+                    <p className="text-2xl font-bold">
                       {formatCurrency(totalAmount, countryData.currency)}
                     </p>
-                    <p className="text-sm mt-2 opacity-80">
+                    <p className="text-xs mt-1 opacity-80">
                       {pricePerNight} × {nights} ليلة
                     </p>
                   </div>
@@ -256,15 +255,14 @@ const CreateChaletLink = () => {
                   <Button
                     onClick={handleCreate}
                     disabled={createLink.isPending}
-                    size="lg"
-                    className="w-full text-lg py-6"
+                    className="w-full py-5"
                   >
                     {createLink.isPending ? (
-                      <span>جاري الإنشاء...</span>
+                      <span className="text-sm">جاري الإنشاء...</span>
                     ) : (
                       <>
-                        <span className="ml-2">إنشاء رابط الحجز</span>
-                        <ArrowRight className="w-5 h-5 mr-2" />
+                        <span className="ml-2 text-sm">إنشاء رابط الحجز</span>
+                        <ArrowRight className="w-4 h-4 mr-2" />
                       </>
                     )}
                   </Button>

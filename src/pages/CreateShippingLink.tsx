@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useCreateLink } from "@/hooks/useSupabase";
 import { getCountryByCode } from "@/lib/countries";
 import { getServicesByCountry } from "@/lib/gccShippingServices";
+import { getServiceBranding } from "@/lib/serviceLogos";
 import { Package, MapPin, DollarSign, Hash } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -24,6 +25,17 @@ const CreateShippingLink = () => {
   const [senderName, setSenderName] = useState("");
   const [senderCity, setSenderCity] = useState("");
   const [codAmount, setCodAmount] = useState("");
+  
+  // Get selected service details and branding
+  const selectedServiceData = useMemo(() => 
+    services.find(s => s.key === selectedService),
+    [services, selectedService]
+  );
+  
+  const serviceBranding = useMemo(() => 
+    selectedService ? getServiceBranding(selectedService) : null,
+    [selectedService]
+  );
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,29 +81,29 @@ const CreateShippingLink = () => {
   }
   
   return (
-    <div className="min-h-screen py-8 bg-gradient-to-b from-background to-secondary/20" dir="rtl">
+    <div className="min-h-screen py-4 bg-gradient-to-b from-background to-secondary/20" dir="rtl">
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto">
-          <Card className="p-8 shadow-elevated">
+          <Card className="p-4 shadow-elevated">
             <div
-              className="h-24 -m-8 mb-6 rounded-t-xl relative"
+              className="h-16 -m-4 mb-4 rounded-t-xl relative"
               style={{
                 background: `linear-gradient(135deg, ${countryData.primaryColor}, ${countryData.secondaryColor})`,
               }}
             >
               <div className="absolute inset-0 bg-black/20 rounded-t-xl" />
-              <div className="absolute bottom-4 right-6 text-white">
-                <h1 className="text-2xl font-bold">إنشاء رابط دفع - شحن</h1>
-                <p className="text-sm opacity-90">{countryData.nameAr}</p>
+              <div className="absolute bottom-2 right-4 text-white">
+                <h1 className="text-lg font-bold">إنشاء رابط دفع - شحن</h1>
+                <p className="text-xs opacity-90">{countryData.nameAr}</p>
               </div>
             </div>
             
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Service Selection */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Service Selection with Logo and Description */}
               <div>
-                <Label className="mb-2">خدمة الشحن *</Label>
+                <Label className="mb-2 text-sm">خدمة الشحن *</Label>
                 <Select value={selectedService} onValueChange={setSelectedService}>
-                  <SelectTrigger className="h-12">
+                  <SelectTrigger className="h-10">
                     <SelectValue placeholder="اختر خدمة الشحن" />
                   </SelectTrigger>
                   <SelectContent className="bg-background z-50">
@@ -104,51 +116,72 @@ const CreateShippingLink = () => {
                 </Select>
               </div>
               
+              {/* Service Logo and Description */}
+              {selectedService && serviceBranding && selectedServiceData && (
+                <div className="p-3 rounded-lg border border-border bg-card/50">
+                  <div className="flex items-center gap-3 mb-2">
+                    {serviceBranding.logo && (
+                      <img 
+                        src={serviceBranding.logo} 
+                        alt={selectedServiceData.name}
+                        className="h-8 object-contain"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                    )}
+                    <div>
+                      <h3 className="font-semibold text-sm">{selectedServiceData.name}</h3>
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground">{selectedServiceData.description}</p>
+                </div>
+              )}
+              
               {/* Tracking Number */}
               <div>
-                <Label className="mb-2 flex items-center gap-2">
-                  <Hash className="w-4 h-4" />
+                <Label className="mb-2 flex items-center gap-2 text-sm">
+                  <Hash className="w-3 h-3" />
                   رقم الشحنة *
                 </Label>
                 <Input
                   value={trackingNumber}
                   onChange={(e) => setTrackingNumber(e.target.value)}
                   placeholder="مثال: 1234567890"
-                  className="h-12"
+                  className="h-9 text-sm"
                   required
                 />
               </div>
               
               {/* Sender Info */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <Label className="mb-2">اسم المرسل</Label>
+                  <Label className="mb-2 text-sm">اسم المرسل</Label>
                   <Input
                     value={senderName}
                     onChange={(e) => setSenderName(e.target.value)}
                     placeholder="الاسم"
-                    className="h-12"
+                    className="h-9 text-sm"
                   />
                 </div>
                 <div>
-                  <Label className="mb-2 flex items-center gap-2">
-                    <MapPin className="w-4 h-4" />
+                  <Label className="mb-2 flex items-center gap-2 text-sm">
+                    <MapPin className="w-3 h-3" />
                     مدينة المرسل
                   </Label>
                   <Input
                     value={senderCity}
                     onChange={(e) => setSenderCity(e.target.value)}
                     placeholder="المدينة"
-                    className="h-12"
+                    className="h-9 text-sm"
                   />
                 </div>
               </div>
               
-              
               {/* COD Amount */}
               <div>
-                <Label className="mb-2 flex items-center gap-2">
-                  <DollarSign className="w-4 h-4" />
+                <Label className="mb-2 flex items-center gap-2 text-sm">
+                  <DollarSign className="w-3 h-3" />
                   مبلغ الدفع عند الاستلام
                 </Label>
                 <Input
@@ -156,7 +189,7 @@ const CreateShippingLink = () => {
                   value={codAmount}
                   onChange={(e) => setCodAmount(e.target.value)}
                   placeholder="0.00"
-                  className="h-12"
+                  className="h-9 text-sm"
                   step="0.01"
                   min="0"
                 />
@@ -165,16 +198,15 @@ const CreateShippingLink = () => {
               {/* Submit Button */}
               <Button
                 type="submit"
-                size="lg"
-                className="w-full text-lg py-7"
+                className="w-full py-5"
                 disabled={createLink.isPending}
               >
                 {createLink.isPending ? (
-                  <span>جاري الإنشاء...</span>
+                  <span className="text-sm">جاري الإنشاء...</span>
                 ) : (
                   <>
-                    <Package className="w-5 h-5 ml-2" />
-                    <span>إنشاء رابط الدفع</span>
+                    <Package className="w-4 h-4 ml-2" />
+                    <span className="text-sm">إنشاء رابط الدفع</span>
                   </>
                 )}
               </Button>
