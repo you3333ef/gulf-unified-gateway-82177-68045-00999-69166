@@ -1,10 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Sparkles, Shield, Zap } from "lucide-react";
+import SEOHead from "@/components/SEOHead";
 
 const Index = () => {
   return (
-    <div className="min-h-screen" dir="rtl">
+    <>
+      <SEOHead 
+        title="نظام الدفع الآمن - روابط دفع ذكية للشاليهات والشحن"
+        description="أنشئ روابط دفع آمنة ومحمية للشاليهات وخدمات الشحن في دول الخليج. دعم جميع شركات الشحن الكبرى مثل أرامكس، دي إتش إل، فيديكس، سمسا والمزيد"
+        image="/og-aramex.jpg"
+        type="website"
+      />
+      <div className="min-h-screen" dir="rtl">
       {/* Hero Section - Minimized */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/5" />
@@ -99,6 +107,7 @@ const Index = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

