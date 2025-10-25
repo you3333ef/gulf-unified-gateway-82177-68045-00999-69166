@@ -54,7 +54,8 @@ const CreateShippingLink = () => {
         type: "shipping",
         country_code: country || "",
         payload: {
-          service_name: selectedService,
+          service_key: selectedService,
+          service_name: selectedServiceData?.name || selectedService,
           tracking_number: trackingNumber,
           sender_name: senderName,
           sender_city: senderCity,

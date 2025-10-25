@@ -8,7 +8,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#000000"
     },
     ogImage: "/og-aramex.jpg",
-    heroImage: "hero-aramex"
+    heroImage: "/og-aramex.jpg"
   },
   dhl: {
     logo: "https://www.dhl.com/content/dam/dhl/global/core/images/logos/dhl-logo.svg",
@@ -17,7 +17,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#D40511"
     },
     ogImage: "/og-dhl.jpg",
-    heroImage: "hero-dhl"
+    heroImage: "/og-dhl.jpg"
   },
   fedex: {
     logo: "https://www.fedex.com/content/dam/fedex-com/logos/logo.png",
@@ -26,7 +26,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#FF6600"
     },
     ogImage: "/og-fedex.jpg",
-    heroImage: "hero-fedex"
+    heroImage: "/og-fedex.jpg"
   },
   ups: {
     logo: "https://www.ups.com/assets/resources/webcontent/images/ups-logo.svg",
@@ -35,7 +35,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#FFB500"
     },
     ogImage: "/og-ups.jpg",
-    heroImage: "hero-ups"
+    heroImage: "/og-ups.jpg"
   },
   empost: {
     logo: "https://www.emiratespost.ae/images/logo.png",
@@ -44,7 +44,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#003087"
     },
     ogImage: "/og-empost.jpg",
-    heroImage: "hero-empost"
+    heroImage: "/og-empost.jpg"
   },
   
   // Saudi Arabia - السعودية
@@ -55,7 +55,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#FF6600"
     },
     ogImage: "/og-smsa.jpg",
-    heroImage: "hero-smsa"
+    heroImage: "/og-smsa.jpg"
   },
   zajil: {
     logo: "https://zajil.com/assets/images/logo.png",
@@ -64,7 +64,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#FF9900"
     },
     ogImage: "/og-zajil.jpg",
-    heroImage: "hero-zajil"
+    heroImage: "/og-zajil.jpg"
   },
   naqel: {
     logo: "https://www.naqelexpress.com/images/logo.png",
@@ -73,7 +73,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#FF6B00"
     },
     ogImage: "/og-naqel.jpg",
-    heroImage: "hero-naqel"
+    heroImage: "/og-naqel.jpg"
   },
   saudipost: {
     logo: "https://sp.com.sa/assets/images/logo.png",
@@ -82,7 +82,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#FFB81C"
     },
     ogImage: "/og-saudipost.jpg",
-    heroImage: "hero-saudipost"
+    heroImage: "/og-saudipost.jpg"
   },
   
   // Kuwait - الكويت
@@ -93,7 +93,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#DA291C"
     },
     ogImage: "/og-kwpost.jpg",
-    heroImage: "hero-kwpost"
+    heroImage: "/og-kwpost.jpg"
   },
   dhlkw: {
     logo: "https://www.dhl.com/content/dam/dhl/global/core/images/logos/dhl-logo.svg",
@@ -102,7 +102,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#D40511"
     },
     ogImage: "/og-dhl.jpg",
-    heroImage: "hero-dhl"
+    heroImage: "/og-dhl.jpg"
   },
   
   // Qatar - قطر
@@ -113,7 +113,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#FFFFFF"
     },
     ogImage: "/og-qpost.jpg",
-    heroImage: "hero-qpost"
+    heroImage: "/og-qpost.jpg"
   },
   dhlqa: {
     logo: "https://www.dhl.com/content/dam/dhl/global/core/images/logos/dhl-logo.svg",
@@ -122,7 +122,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#D40511"
     },
     ogImage: "/og-dhl.jpg",
-    heroImage: "hero-dhl"
+    heroImage: "/og-dhl.jpg"
   },
   
   // Oman - عمان
@@ -133,7 +133,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#009639"
     },
     ogImage: "/og-omanpost.jpg",
-    heroImage: "hero-omanpost"
+    heroImage: "/og-omanpost.jpg"
   },
   dhlom: {
     logo: "https://www.dhl.com/content/dam/dhl/global/core/images/logos/dhl-logo.svg",
@@ -142,7 +142,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#D40511"
     },
     ogImage: "/og-dhl.jpg",
-    heroImage: "hero-dhl"
+    heroImage: "/og-dhl.jpg"
   },
   
   // Bahrain - البحرين
@@ -153,7 +153,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#FFFFFF"
     },
     ogImage: "/og-bahpost.jpg",
-    heroImage: "hero-bahpost"
+    heroImage: "/og-bahpost.jpg"
   },
   dhlbh: {
     logo: "https://www.dhl.com/content/dam/dhl/global/core/images/logos/dhl-logo.svg",
@@ -162,7 +162,7 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#D40511"
     },
     ogImage: "/og-dhl.jpg",
-    heroImage: "hero-dhl"
+    heroImage: "/og-dhl.jpg"
   }
 };
 

