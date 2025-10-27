@@ -104,7 +104,6 @@ const formatTelegramMessage = (message: TelegramMessage): string => {
 📦 <b>تفاصيل الشحنة:</b>
 • رقم الشحنة: <code>${data.tracking_number || 'غير محدد'}</code>
 • خدمة الشحن: ${data.service_name || 'غير محدد'}
-• وزن الطرد: ${data.package_weight || 'غير محدد'} كجم
 • وصف الطرد: ${data.package_description || 'غير محدد'}
 • مبلغ الدفع: ${data.cod_amount || 0} ر.س
 • الدولة: ${data.country || 'غير محدد'}

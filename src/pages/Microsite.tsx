@@ -165,15 +165,6 @@ const Microsite = () => {
                       </div>
                     </div>
                     
-                    <div className="flex items-start gap-3">
-                      <Package className="w-5 h-5 text-primary mt-1" />
-                      <div>
-                        <p className="font-semibold mb-1">وزن الطرد</p>
-                        <p className="text-muted-foreground text-sm">
-                          {payload.package_weight || 'غير محدد'} كجم
-                        </p>
-                      </div>
-                    </div>
                     
                     <div className="flex items-start gap-3">
                       <Truck className="w-5 h-5 text-primary mt-1" />

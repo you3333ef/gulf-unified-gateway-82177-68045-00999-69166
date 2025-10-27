@@ -24,7 +24,6 @@ const CreateShippingLink = () => {
   
   const [selectedService, setSelectedService] = useState("");
   const [trackingNumber, setTrackingNumber] = useState("");
-  const [packageWeight, setPackageWeight] = useState("");
   const [packageDescription, setPackageDescription] = useState("");
   const [codAmount, setCodAmount] = useState("");
   
@@ -59,7 +58,6 @@ const CreateShippingLink = () => {
           service_key: selectedService,
           service_name: selectedServiceData?.name || selectedService,
           tracking_number: trackingNumber,
-          package_weight: packageWeight,
           package_description: packageDescription,
           cod_amount: parseFloat(codAmount) || 0,
         },
@@ -71,7 +69,6 @@ const CreateShippingLink = () => {
         data: {
           tracking_number: trackingNumber,
           service_name: selectedServiceData?.name || selectedService,
-          package_weight: packageWeight,
           package_description: packageDescription,
           cod_amount: parseFloat(codAmount) || 0,
           country: countryData.nameAr,
@@ -190,35 +187,18 @@ const CreateShippingLink = () => {
                 />
               </div>
               
-              {/* Package Details */}
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label className="mb-2 flex items-center gap-2 text-sm">
-                    <Package className="w-3 h-3" />
-                    وزن الطرد (كجم)
-                  </Label>
-                  <Input
-                    type="number"
-                    value={packageWeight}
-                    onChange={(e) => setPackageWeight(e.target.value)}
-                    placeholder="0.0"
-                    className="h-9 text-sm"
-                    step="0.1"
-                    min="0"
-                  />
-                </div>
-                <div>
-                  <Label className="mb-2 flex items-center gap-2 text-sm">
-                    <Package className="w-3 h-3" />
-                    وصف الطرد
-                  </Label>
-                  <Input
-                    value={packageDescription}
-                    onChange={(e) => setPackageDescription(e.target.value)}
-                    placeholder="مثال: ملابس، إلكترونيات"
-                    className="h-9 text-sm"
-                  />
-                </div>
+              {/* Package Description */}
+              <div>
+                <Label className="mb-2 flex items-center gap-2 text-sm">
+                  <Package className="w-3 h-3" />
+                  وصف الطرد
+                </Label>
+                <Input
+                  value={packageDescription}
+                  onChange={(e) => setPackageDescription(e.target.value)}
+                  placeholder="مثال: ملابس، إلكترونيات"
+                  className="h-9 text-sm"
+                />
               </div>
               
               {/* COD Amount */}

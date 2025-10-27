@@ -25,15 +25,15 @@ const Index = () => {
             </div>
             
             <h1 className="text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-fade-in">
-              Gulf Unified Platform
+              منصة الشحن الذكية
             </h1>
             
             <p className="text-base md:text-lg text-muted-foreground mb-2 animate-fade-in">
-              المنصة الخليجية الموحدة للخدمات الرقمية
+              حلول شحن متطورة وموثوقة
             </p>
             
             <p className="text-sm text-muted-foreground mb-6 max-w-xl mx-auto animate-fade-in">
-              احجز الشاليهات، أرسل الشحنات، وأدر خدماتك عبر جميع دول مجلس التعاون الخليجي
+              نقدم خدمات شحن سريعة وآمنة مع دعم جميع شركات الشحن الكبرى في المنطقة
             </p>
             
             <div className="flex justify-center animate-fade-in">

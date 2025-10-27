@@ -42,13 +42,6 @@ const PaymentDetails = () => {
                 <span className="font-semibold">{shippingInfo.tracking_number}</span>
               </div>
             )}
-            {shippingInfo.package_weight && (
-              <div className="flex items-center gap-2">
-                <Package className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
-                <span className="text-muted-foreground">وزن الطرد:</span>
-                <span className="font-semibold">{shippingInfo.package_weight} كجم</span>
-              </div>
-            )}
             {shippingInfo.package_description && (
               <div className="flex items-center gap-2">
                 <Truck className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
