@@ -68,6 +68,7 @@ const DynamicPaymentLayout: React.FC<DynamicPaymentLayoutProps> = ({
     <>
       <PaymentMetaTags 
         serviceName={serviceName}
+        serviceKey={actualServiceKey}
         amount={amount}
         title={title}
         description={description}

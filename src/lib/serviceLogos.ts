@@ -1,5 +1,5 @@
 // Service logos and branding - All GCC shipping carriers
-export const serviceLogos: Record<string, { logo: string; colors: { primary: string; secondary: string }; ogImage?: string; heroImage?: string }> = {
+export const serviceLogos: Record<string, { logo: string; colors: { primary: string; secondary: string }; ogImage?: string; heroImage?: string; description?: string }> = {
   // UAE - الإمارات
   aramex: {
     logo: "https://www.aramex.com/sites/default/files/aramex-logo.svg",
@@ -8,7 +8,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#000000"
     },
     ogImage: "/og-aramex.jpg",
-    heroImage: "/og-aramex.jpg"
+    heroImage: "/og-aramex.jpg",
+    description: "شركة رائدة في خدمات الشحن السريع والحلول اللوجستية في المنطقة"
   },
   dhl: {
     logo: "https://www.dhl.com/content/dam/dhl/global/core/images/logos/dhl-logo.svg",
@@ -17,7 +18,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#D40511"
     },
     ogImage: "/og-dhl.jpg",
-    heroImage: "/og-dhl.jpg"
+    heroImage: "/og-dhl.jpg",
+    description: "شبكة شحن عالمية توفر خدمات التوصيل السريع الدولي والمحلي"
   },
   fedex: {
     logo: "https://www.fedex.com/content/dam/fedex-com/logos/logo.png",
@@ -26,7 +28,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#FF6600"
     },
     ogImage: "/og-fedex.jpg",
-    heroImage: "/og-fedex.jpg"
+    heroImage: "/og-fedex.jpg",
+    description: "خدمات شحن دولية موثوقة مع تتبع فوري للشحنات"
   },
   ups: {
     logo: "https://www.ups.com/assets/resources/webcontent/images/ups-logo.svg",
@@ -35,7 +38,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#FFB500"
     },
     ogImage: "/og-ups.jpg",
-    heroImage: "/og-ups.jpg"
+    heroImage: "/og-ups.jpg",
+    description: "حلول لوجستية متكاملة وخدمات شحن سريعة حول العالم"
   },
   empost: {
     logo: "https://www.emiratespost.ae/images/logo.png",
@@ -44,7 +48,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#003087"
     },
     ogImage: "/og-empost.jpg",
-    heroImage: "/og-empost.jpg"
+    heroImage: "/og-empost.jpg",
+    description: "المشغل الوطني للبريد في دولة الإمارات العربية المتحدة"
   },
   
   // Saudi Arabia - السعودية
@@ -55,7 +60,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#FF6600"
     },
     ogImage: "/og-smsa.jpg",
-    heroImage: "/og-smsa.jpg"
+    heroImage: "/og-smsa.jpg",
+    description: "أكبر شركة شحن سعودية متخصصة في التوصيل السريع والخدمات اللوجستية"
   },
   zajil: {
     logo: "https://zajil.com/assets/images/logo.png",
@@ -64,7 +70,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#FF9900"
     },
     ogImage: "/og-zajil.jpg",
-    heroImage: "/og-zajil.jpg"
+    heroImage: "/og-zajil.jpg",
+    description: "شركة سعودية رائدة في خدمات البريد السريع والشحن"
   },
   naqel: {
     logo: "https://www.naqelexpress.com/images/logo.png",
@@ -73,7 +80,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#FF6B00"
     },
     ogImage: "/og-naqel.jpg",
-    heroImage: "/og-naqel.jpg"
+    heroImage: "/og-naqel.jpg",
+    description: "حلول شحن متطورة وخدمات لوجستية متكاملة داخل المملكة"
   },
   saudipost: {
     logo: "https://sp.com.sa/assets/images/logo.png",
@@ -82,7 +90,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#FFB81C"
     },
     ogImage: "/og-saudipost.jpg",
-    heroImage: "/og-saudipost.jpg"
+    heroImage: "/og-saudipost.jpg",
+    description: "المشغل الوطني للبريد في المملكة العربية السعودية"
   },
   
   // Kuwait - الكويت
@@ -93,7 +102,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#DA291C"
     },
     ogImage: "/og-kwpost.jpg",
-    heroImage: "/og-kwpost.jpg"
+    heroImage: "/og-kwpost.jpg",
+    description: "المشغل الوطني للبريد في دولة الكويت"
   },
   dhlkw: {
     logo: "https://www.dhl.com/content/dam/dhl/global/core/images/logos/dhl-logo.svg",
@@ -102,7 +112,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#D40511"
     },
     ogImage: "/og-dhl.jpg",
-    heroImage: "/og-dhl.jpg"
+    heroImage: "/og-dhl.jpg",
+    description: "شبكة شحن عالمية توفر خدمات التوصيل السريع الدولي والمحلي"
   },
   
   // Qatar - قطر
@@ -113,7 +124,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#FFFFFF"
     },
     ogImage: "/og-qpost.jpg",
-    heroImage: "/og-qpost.jpg"
+    heroImage: "/og-qpost.jpg",
+    description: "المشغل الوطني للبريد في دولة قطر"
   },
   dhlqa: {
     logo: "https://www.dhl.com/content/dam/dhl/global/core/images/logos/dhl-logo.svg",
@@ -122,7 +134,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#D40511"
     },
     ogImage: "/og-dhl.jpg",
-    heroImage: "/og-dhl.jpg"
+    heroImage: "/og-dhl.jpg",
+    description: "شبكة شحن عالمية توفر خدمات التوصيل السريع الدولي والمحلي"
   },
   
   // Oman - عمان
@@ -133,7 +146,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#009639"
     },
     ogImage: "/og-omanpost.jpg",
-    heroImage: "/og-omanpost.jpg"
+    heroImage: "/og-omanpost.jpg",
+    description: "المشغل الوطني للبريد في سلطنة عُمان"
   },
   dhlom: {
     logo: "https://www.dhl.com/content/dam/dhl/global/core/images/logos/dhl-logo.svg",
@@ -142,7 +156,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#D40511"
     },
     ogImage: "/og-dhl.jpg",
-    heroImage: "/og-dhl.jpg"
+    heroImage: "/og-dhl.jpg",
+    description: "شبكة شحن عالمية توفر خدمات التوصيل السريع الدولي والمحلي"
   },
   
   // Bahrain - البحرين
@@ -153,7 +168,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#FFFFFF"
     },
     ogImage: "/og-bahpost.jpg",
-    heroImage: "/og-bahpost.jpg"
+    heroImage: "/og-bahpost.jpg",
+    description: "المشغل الوطني للبريد في مملكة البحرين"
   },
   dhlbh: {
     logo: "https://www.dhl.com/content/dam/dhl/global/core/images/logos/dhl-logo.svg",
@@ -162,7 +178,8 @@ export const serviceLogos: Record<string, { logo: string; colors: { primary: str
       secondary: "#D40511"
     },
     ogImage: "/og-dhl.jpg",
-    heroImage: "/og-dhl.jpg"
+    heroImage: "/og-dhl.jpg",
+    description: "شبكة شحن عالمية توفر خدمات التوصيل السريع الدولي والمحلي"
   }
 };
 

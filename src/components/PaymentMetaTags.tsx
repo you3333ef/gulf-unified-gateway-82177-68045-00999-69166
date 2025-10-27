@@ -3,16 +3,18 @@ import { getServiceBranding } from "@/lib/serviceLogos";
 
 interface PaymentMetaTagsProps {
   serviceName: string;
+  serviceKey?: string;
   amount?: string;
   title?: string;
   description?: string;
 }
 
-const PaymentMetaTags = ({ serviceName, amount, title, description }: PaymentMetaTagsProps) => {
-  const branding = getServiceBranding(serviceName);
+const PaymentMetaTags = ({ serviceName, serviceKey, amount, title, description }: PaymentMetaTagsProps) => {
+  const branding = getServiceBranding(serviceKey || serviceName);
   
   const ogTitle = title || `الدفع - ${serviceName}`;
-  const ogDescription = description || `صفحة دفع آمنة ومحمية لخدمة ${serviceName}${amount ? ` - ${amount}` : ''}`;
+  const serviceDescription = branding.description || `خدمة شحن موثوقة`;
+  const ogDescription = description || `صفحة دفع آمنة ومحمية لخدمة ${serviceName} - ${serviceDescription}${amount ? ` - ${amount}` : ''}`;
   
   // Use company-specific OG image or hero image
   const ogImage = branding.ogImage 
