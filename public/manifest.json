@@ -1,7 +1,7 @@
 {
-  "name": "Gulf Unified Gateway",
-  "short_name": "Gulf Gateway",
-  "description": "بوابة الخليج الموحدة للخدمات",
+  "name": "منصة الشحن الذكية",
+  "short_name": "الشحن الذكي",
+  "description": "منصة شحن ذكية وموثوقة - خدمات شحن سريعة وآمنة",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

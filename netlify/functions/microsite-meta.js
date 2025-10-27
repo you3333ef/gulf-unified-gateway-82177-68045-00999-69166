@@ -133,7 +133,7 @@ exports.handler = async (event, context) => {
   <!-- Basic Meta Tags -->
   <title>${title}</title>
   <meta name="description" content="${description}" />
-  <meta name="author" content="Gulf Unified Platform" />
+  <meta name="author" content="منصة الشحن الذكية" />
   
   <!-- Open Graph / Facebook / WhatsApp -->
   <meta property="og:type" content="website" />
