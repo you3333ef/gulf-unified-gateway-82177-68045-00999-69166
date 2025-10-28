@@ -5,7 +5,6 @@ redirectsOrigin = "config"
 plugins = []
 
 [build]
-edge_functions = "/workspace/netlify/edge-functions"
 publish = "/workspace/dist"
 publishOrigin = "config"
 commandOrigin = "config"
@@ -41,6 +40,18 @@ Referrer-Policy = "strict-origin-when-cross-origin"
 
 [[redirects]]
 from = "/r/*"
+to = "/.netlify/functions/microsite-meta"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
+from = "/pay/*"
 to = "/.netlify/functions/microsite-meta"
 status = 200.0
 force = false
